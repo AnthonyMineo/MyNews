@@ -19,7 +19,7 @@ public interface NYTService {
     Observable<TopStoriesResponse> getTSArticles();
 
     @GET("mostpopular/v2/mostviewed/all-sections/30.json?api-key=fc87d275a9374ceb9dfaca225dc7380d")
-    Observable<List<MostPopularResponse>> getMPArticles();
+    Observable<MostPopularResponse> getMPArticles();
 
     //will probably change, just want to do some test before
     @GET("search/v2/articlesearch.json?q={key-words}&fq=news_desk:(\"{category}\")&begin_date{begin}&end_date={end}&api-key=fc87d275a9374ceb9dfaca225dc7380d")
