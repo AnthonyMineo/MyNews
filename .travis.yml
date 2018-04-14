@@ -1,4 +1,14 @@
 language : android
+sudo: required
+jdk: oraclejdk8
+
+before_cache:
+ -rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+ -rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+ directories:
+ -$HOME/.gradle/caches/
+ -$HOME/.gradle/wrapper/
 
 # Global Reference Values for the file
 env:
@@ -15,15 +25,19 @@ env:
   #Install Timeout (by default 2min is not enough for slow computers)
    - ADB_INSTALL_TIMEOUT=20 
 
+  #Keystore Password
+  -secure : "xyMN5QgzBekVOx/bTIDjVS6ai2NGDBaza3ELjdNKtc71y/7uQ2abLlVt1nTTUxKSd8dK2NttUhr0dxKcwDH9rDLcFsHMHpJ5CaeQWZKu+PurSVBaysi0AuBa7dRMCNaFQmRIlr4zkd43ESGUhZt+eTssfXeyukxFNguK7vfyp50P4C0OGnYrnkF2YVPTk0wQtu4MeOPa0inW+v/RaorC/2GaM/yaTz6p5n6tR+0zXSAIankPyoxE3uY7uemBIxl0emccRyyg9p2jRgncpiAI5srrZJkwCod6/R/nGduSi5PLGseLbHdiSKlqkFisv4GZDJ4Ke52Ppc8jTfVohxqk0clpBr69IcdcEbubJYnZBSrJyX6ZxWlRJOl5P3xfVrWxD/KDqlbWdsIQKuUzgBeuEnGu6UxJtuccwj40mnsFVpNSXMsc09SOZPoMnau4xt6xeki44qCvbh33qk6PIDDZ1t4BNdK43Jmd4HjmsFMYLWUEMZErD4iYe5Wq94t2ssRr78FMO5cFKaijoA7jA9d0GISToCtJpsu0LXDmAafhrHUtFcaG/o6nSTg5zN3aYp9xTrx5CXv4jdmBlOh/CNLBMoc6Hxwr34b6Z86mKEWz72KellXDVtpb4+V3dkBJGQ9BVuPAcNIZMJeEgkLGj0FIyosgotxBM5PBEQmMuqHAuDI="
+
+  #Key Password
+  secure: "QTaXJ2wA9PmDu2lT4vqK8gAhuHXNGAxo6rE2FXPUYF9Q3eKYXNb4O6FApytXwZ/LvCxq+H5Vk1KiStiAofc43H0XvWb8QVnXvfztnRrnw3mm1ven9xkwm/z/hjf+RXscf5fUhIHauGrikAdnwFpA2wrUgbl7sbib4pEQk2kKDaXSb5Sbt2e6DtfpZW+UrEp4faP045G1aNSPidplfVDQZoyK/UX46SYblCYYRg3up6yTxQyiwXoMjSC2ms5fzJUZQPJKUFs3Ynu4UYe8Yd55HNEnY5VJWa3UAe4kCSiYEXlmVjUFkgH0UUCPX6vhDwqvQm7h9r4UeBjJs17wdysx4GbT1ZH0Wqzqm0AzajgN24v+OrrwKqnvnptk2ZcGh+8E2MxOVEay7YisdYkIDgQ/7NNLaZEhVmuxDap9zF5v1ofYSQJxvJK1lzA2lzjsOLCk7gs3RRrq6sb+jiKt9zCEFhLSdDORgUINFR5VrZ2L1mmIgxOG+AlWCqXvNya0S4PrC74x8K4yYpg1s9k5Q7jCw8q3/UEBLhJ5s3sETqTXuKvDnyoHoZHGIWbTcTl4XtSg96riVkM7oFYg/Mjjl16gLUNgn+51uFZlm1A+wO+KkNxcvE0JTX0JjK2VwjWW1D9+P3SA5G0kkjfYE+DMsF2kJUFoXp6pfYR/G0vaNSxHvsA="
+
 android:
  components:
-
+  
     # Android SDK Tools
     - tools
     - platform-tools
-
-    #repeat tools to get newer Android SDK Tools
-    - tools 
+    - build-tools-$ANDROID_BUILD_TOOLS
 
     # The SDK version used to compile your project
     - android-$ANDROID_API_LEVEL
@@ -36,9 +50,21 @@ android:
 
     # Specify at least one system image for emulator
     - sys-img-armeabi-v7a-android-$EMULATOR_API_LEVEL
+    - sys-img-armeabi-v7a-addon-google_apis-google-$ANDROID_API_LEVEL
+    - sys-img-armeabi-v7a-addon-google_apis-google-$EMULATOR_API_LEVEL
 
     # Additional components
+    - extra-google-m2repository
     - extra-android-m2repository
+
+  licenses:
+    - android-sdk-preview-license-.+
+    - android-sdk-license-.+
+    - google-gdk-license-.+
+
+before_install:
+- chmod +x gradlew
+- openssl aes-256-cbc -K $encrypted_8f5029169341_key -iv $encrypted_8f5029169341_iv -in keystore.jks.enc -out keystore.jks -d
 
 before_script:
 
@@ -51,5 +77,25 @@ before_script:
 # uncomment the following line and add the path
 # - cd nomDuDossierDeGradleW
 
-script: 
-  ./gradlew connectedAndroidTest
+script:
+- "./gradlew clean build connectedCheck -PdisablePreDex --stacktrace"
+
+before_deploy:
+- cp $TRAVIS_BUILD_DIR/.keystore $HOME
+- cd app/build/outputs/apk/
+- jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore $HOME/keystore.jks -storepass $storepass -keypass $keypass app-release-unsigned.apk myapp_keystore
+
+# Verification
+- jarsigner -verify app-release-unsigned.apk
+- "${ANDROID_HOME}/build-tools/24.0.2/zipalign -v 4 app-release-unsigned.apk myapp.apk"
+
+deploy:
+  provider: releases
+  file: myapp.apk
+  skip_cleanup: true
+  on:
+    repo: Denmaaa/MyNews
+    tags: true
+    jdk: oraclejdk8
+  api_key:
+    secure: "kfQnW6rOoc977oKfbNag+HYfeuqeiu21cGV22TJKOmIxXKgQJmn4aMW4hVZ+P8AvvwWfhp5b9EL7XV4MJtymbhAYq1yDT5lBcusogCHjJa3Lp5i+gcCsJaVJa+pTIaKT1lfy3cgpro6LabIMoZIuJgTZT/l8T3klYEsUVZM4sMQhZcVH/HngBMZ60SIaDwixvt3gpzvgbbncxfjZAvHPhM3/YRglnkc5SxdjEkgbQphcg0htUo5vjSVKDgxdG+hSsVUFMu5BtZe2oDQBQQfvZj9tk5uaQd/kOSyu1vw78dnC7bO0zaeIXYVF+xfzDC5dtOLFlJQTA0ACGrkecVpbKBY0NegfSShrseOY309ZsCGrYyQopelZkvblyiS0RR1TMGp0VxaB9D2S/P3JkBi5s2HI5KS5l5lP1erX2pdFX2Eu4/49A7iGuJzrXGJmvYyW7RuovE5fsF4F7tzTQ+GEhl9tNxcFC/GHhzWFLV0gRKhwA/pfu6LQ/oGykG2b9ELSPxNhcFMV6K5ExW2ZfmaqCMG8UrTbMGS1ALedLicnpsQ4yOxXCEPsuUb3mTrkZ3wmN1D2sg9UA6hdy7kADzz9QFzvslIntDQvONECqKUHe58o4ml54TsIZ0iEaQVdi98eh01/h7LRY7s0/az+FOL0wP+f97n+suMvz3GwGg6/CKc="
