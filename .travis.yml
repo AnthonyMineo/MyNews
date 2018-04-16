@@ -1,31 +1,3 @@
-
-Skip to content
-This repository
-
-    Pull requests
-    Issues
-    Marketplace
-    Explore
-
-    @Denmaaa
-
-2
-0
-
-    0
-
-Denmaaa/MyNews
-Code
-Issues 0
-Pull requests 0
-Projects 0
-Wiki
-Insights
-Settings
-MyNews/.travis.yml
-ae65891 25 minutes ago
-@Denmaaa Denmaaa trying to figure out what's wrong with .travis.yml 8
-55 lines (50 sloc) 1.73 KB
 sudo: false
 language: android
 jdk: oraclejdk8
@@ -61,10 +33,10 @@ android:
     - addon-google_apis-google-$ANDROID_API_LEVEL
     - addon-google_apis-google-$EMULATOR_API_LEVEL
 
-    - sys-img-armeabi-v7a-addon-google_apis-google-$ANDROID_API_LEVEL
-    - sys-img-armeabi-v7a-addon-google_apis-google-$EMULATOR_API_LEVEL
+    - sys-img-armeabi-v7a-addon-google_apis-google-15
+  
 before_script:
-  - echo no | android create avd --force -n test -t android-EMULATOR_API_LEVEL --abi google_apis/$ANDROID_ABI
+  - echo no | android create avd --force -n test -t android-15 -- abi armeabi-v7a
   - emulator -avd test -no-skin -no-audio -no-window &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
