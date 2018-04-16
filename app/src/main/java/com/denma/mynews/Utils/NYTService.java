@@ -1,8 +1,11 @@
 package com.denma.mynews.Utils;
 
 import com.denma.mynews.Models.ArticleSearchAPI.ArticleSearchResponse;
+import com.denma.mynews.Models.MostPopularAPI.MostPopularArticles;
 import com.denma.mynews.Models.MostPopularAPI.MostPopularResponse;
 import com.denma.mynews.Models.TopStoriesAPI.TopStoriesResponse;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.List;
 
@@ -25,10 +28,19 @@ public interface NYTService {
     @GET("search/v2/articlesearch.json?q={key-words}&fq=news_desk:(\"{category}\")&begin_date{begin}&end_date={end}&api-key=fc87d275a9374ceb9dfaca225dc7380d")
     Observable<List<ArticleSearchResponse>> getSArticles(@Path("key-words") String keyWords, @Path("category") String category, @Path("begin") String beginDate, @Path("end") String endDate);
 
-
     public static final Retrofit retrofit = new Retrofit.Builder()
             .baseUrl("https://api.nytimes.com/svc/")
             .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .build();
+
+    Gson gson = new GsonBuilder()
+            .registerTypeAdapter(MostPopularArticles.class, new MostPopularArticles.myDeserializer())
+            .create();
+
+    public static final Retrofit retrofit2 = new Retrofit.Builder()
+            .baseUrl("https://api.nytimes.com/svc/")
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build();
 }
