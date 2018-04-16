@@ -15,6 +15,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface NYTService {
 
@@ -25,8 +26,8 @@ public interface NYTService {
     Observable<MostPopularResponse> getMPArticles();
 
     //will probably change, just want to do some test before
-    @GET("search/v2/articlesearch.json?q={key-words}&fq=news_desk:(\"{category}\")&begin_date{begin}&end_date={end}&api-key=fc87d275a9374ceb9dfaca225dc7380d")
-    Observable<List<ArticleSearchResponse>> getSArticles(@Path("key-words") String keyWords, @Path("category") String category, @Path("begin") String beginDate, @Path("end") String endDate);
+    @GET("search/v2/articlesearch.json?api-key=fc87d275a9374ceb9dfaca225dc7380d")
+    Observable<ArticleSearchResponse> getSArticles(@Query("q") String keyWords, @Query("fq") String category, @Query("begin_date") String beginDate, @Query("end_date") String endDate);
 
     public static final Retrofit retrofit = new Retrofit.Builder()
             .baseUrl("https://api.nytimes.com/svc/")

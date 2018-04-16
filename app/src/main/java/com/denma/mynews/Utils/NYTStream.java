@@ -32,7 +32,7 @@ public class NYTStream {
     }
 
     // - Create a stream that will get top stories article from NYT Top Stories API
-    public static Observable<List<ArticleSearchResponse>> streamFetchArticleSearch(String keyWords, String category, String beginDate, String endDate){
+    public static Observable<ArticleSearchResponse> streamFetchArticleSearch(String keyWords, String category, String beginDate, String endDate){
         NYTService NytService = NYTService.retrofit.create(NYTService.class);
         return NytService.getSArticles(keyWords, category, beginDate, endDate)
                 .subscribeOn(Schedulers.io())
