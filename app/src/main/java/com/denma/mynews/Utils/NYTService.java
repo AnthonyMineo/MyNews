@@ -25,7 +25,7 @@ public interface NYTService {
     @GET("mostpopular/v2/mostviewed/all-sections/30.json?api-key=fc87d275a9374ceb9dfaca225dc7380d")
     Observable<MostPopularResponse> getMPArticles();
 
-    //will probably change, just want to do some test before
+    //working as intend
     @GET("search/v2/articlesearch.json?api-key=fc87d275a9374ceb9dfaca225dc7380d")
     Observable<ArticleSearchResponse> getSArticles(@Query("q") String keyWords, @Query("fq") String category, @Query("begin_date") String beginDate, @Query("end_date") String endDate);
 

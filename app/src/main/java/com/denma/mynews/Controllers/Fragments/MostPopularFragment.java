@@ -36,10 +36,15 @@ public class MostPopularFragment extends Fragment {
 
     public MostPopularFragment() { }
 
+    public static MostPopularFragment newInstance() {
+        return (new MostPopularFragment());
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_most_popular, container, false);
         ButterKnife.bind(this, view);
+        this.executeHttpRequestWithRetrofit();
         return view;
     }
 
@@ -47,16 +52,6 @@ public class MostPopularFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         this.disposeWhenDestroy();
-    }
-
-    // -----------------
-    // ACTIONS
-    // -----------------
-
-    @OnClick(R.id.fragment_most_popular_button)
-    public void submit(View view) {
-        // 2 - Call the stream
-        this.executeHttpRequestWithRetrofit();
     }
 
     // -------------------

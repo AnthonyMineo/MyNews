@@ -31,7 +31,7 @@ public class NYTStream {
                 .timeout(10, TimeUnit.SECONDS);
     }
 
-    // - Create a stream that will get top stories article from NYT Top Stories API
+    // - Create a stream that will get articles from NYT Article Search API
     public static Observable<ArticleSearchResponse> streamFetchArticleSearch(String keyWords, String category, String beginDate, String endDate){
         NYTService NytService = NYTService.retrofit.create(NYTService.class);
         return NytService.getSArticles(keyWords, category, beginDate, endDate)

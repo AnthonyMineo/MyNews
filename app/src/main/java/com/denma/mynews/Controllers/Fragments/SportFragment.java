@@ -37,10 +37,15 @@ public class SportFragment extends Fragment {
 
     public SportFragment() { }
 
+    public static SportFragment newInstance() {
+        return (new SportFragment());
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sport, container, false);
         ButterKnife.bind(this, view);
+        this.executeHttpRequestWithRetrofit();
         return view;
     }
 
@@ -48,16 +53,6 @@ public class SportFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         this.disposeWhenDestroy();
-    }
-
-    // -----------------
-    // ACTIONS
-    // -----------------
-
-    @OnClick(R.id.fragment_sport_button)
-    public void submit(View view) {
-        // 2 - Call the stream
-        this.executeHttpRequestWithRetrofit();
     }
 
     // -------------------
