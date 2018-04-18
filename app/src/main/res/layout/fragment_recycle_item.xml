@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/fragment_recycle_item_image"
+            android:layout_width="70dip"
+            android:layout_height="70dip"
+            android:layout_margin="5dp"/>
+
+        <TextView
+            android:id="@+id/fragment_recycle_item_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_toRightOf="@id/fragment_recycle_item_image" />
+
+        <TextView
+            android:id="@+id/fragment_recycle_item_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:layout_alignParentRight="true" />
+
+        <TextView
+            android:id="@+id/fragment_recycle_item_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxHeight="50dp"
+            android:textSize="19sp"
+            android:layout_toRightOf="@id/fragment_recycle_item_image"
+            android:layout_below="@id/fragment_recycle_item_category" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorText"
+            android:layout_toRightOf="@id/fragment_recycle_item_image"
+            android:layout_alignBottom="@id/fragment_recycle_item_image">
+        </FrameLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

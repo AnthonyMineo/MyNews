@@ -4,7 +4,6 @@ import com.denma.mynews.Models.ArticleSearchAPI.ArticleSearchResponse;
 import com.denma.mynews.Models.MostPopularAPI.MostPopularResponse;
 import com.denma.mynews.Models.TopStoriesAPI.TopStoriesResponse;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;

@@ -9,16 +9,16 @@ public class ArticleSearchResult {
 
     @SerializedName("docs")
     @Expose
-    private List<ArticleSearchDoc> docs = null;
+    private List<ArticleSearchArticles> docs = null;
     @SerializedName("meta")
     @Expose
     private ArticleSearchMeta meta;
 
-    public List<ArticleSearchDoc> getDocs() {
+    public List<ArticleSearchArticles> getDocs() {
         return docs;
     }
 
-    public void setDocs(List<ArticleSearchDoc> docs) {
+    public void setDocs(List<ArticleSearchArticles> docs) {
         this.docs = docs;
     }
 
