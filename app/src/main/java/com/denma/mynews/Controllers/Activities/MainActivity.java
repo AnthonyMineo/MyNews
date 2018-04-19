@@ -1,5 +1,6 @@
 package com.denma.mynews.Controllers.Activities;
 
+import android.content.Intent;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     // 1 - Configure Toolbar
     private void configureToolBar(){
-        this.toolbar = (Toolbar) findViewById(R.id.activity_main_toolbar);
+        this.toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
 
@@ -135,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // - Handle actions on menu items
         switch (item.getItemId()) {
             case R.id.menu_activity_main_search:
-                Toast.makeText(this, "Recherche indisponible", Toast.LENGTH_LONG).show();
+                launchSearchActivity();
                 return true;
             case R.id.menu_activity_main_more:
                 Toast.makeText(this, "soon", Toast.LENGTH_LONG).show();
@@ -170,7 +171,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.activity_main_drawer_sports:
                 this.showFragment(FRAGMENT_SPORTS);
                 break;
-                //Need to add other click effect here
+            case R.id.activity_main_drawer_search:
+                launchSearchActivity();
             default:
                 break;
         }
@@ -230,5 +232,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void showSportsFragment(){
         if (this.sportFragment == null) this.sportFragment = SportFragment.newInstance();
         pager.setCurrentItem(FRAGMENT_SPORTS);
+    }
+
+    // --------------
+    // Activity
+    // --------------
+
+    private void launchSearchActivity(){
+        Intent searchActivityIntent = new Intent(MainActivity.this, SearchActivity.class);
+        this.startActivity(searchActivityIntent);
     }
 }

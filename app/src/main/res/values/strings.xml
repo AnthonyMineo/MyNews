@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">MyNews</string>
+
     <!-- Used in NavigationDrawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -19,4 +20,17 @@
     <!-- Used in toolbar menu -->
     <string name="menu_tool_1">Search</string>
     <string name="menu_tool_2">More</string>
+
+    <!-- Used in search and notif fragments -->
+    <string name="search_query_term_hint">Search query term</string>
+    <string name="begin_date">Begin Date</string>
+    <string name="end_date">End Date</string>
+    <string name="search_button_text">SEARCH</string>
+    <string name="check_box_arts">Arts</string>
+    <string name="check_box_politics">Politics</string>
+    <string name="check_box_business">Business</string>
+    <string name="check_box_sports">Sports</string>
+    <string name="check_box_culture">Culture</string>
+    <string name="check_box_travel">Travel</string>
+
 </resources>

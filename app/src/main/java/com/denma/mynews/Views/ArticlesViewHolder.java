@@ -32,14 +32,24 @@ public class ArticlesViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void updateWithTopStories(TopStoriesArticles topStoriesArticles, RequestManager glide){
-        glide.load(topStoriesArticles.getMultimedia().get(0).getUrl()).into(image);
+        try{
+            glide.load(topStoriesArticles.getMultimedia().get(0).getUrl()).into(image);
+        } catch (IndexOutOfBoundsException e){
+            Log.e("TAG","no media");
+        }
+
         this.category.setText(topStoriesArticles.getSection() + " > " + topStoriesArticles.getSubsection());
         this.date.setText(topStoriesArticles.getUpdatedDate().substring(0, 10));
         this.title.setText(topStoriesArticles.getTitle());
     }
 
     public void updateWithMostPopular(MostPopularArticles mostPopularArticles, RequestManager glide){
-        glide.load(mostPopularArticles.getMedia().get(0).getMediaMetadata().get(0).getUrl()).into(image);
+        try{
+            glide.load(mostPopularArticles.getMedia().get(0).getMediaMetadata().get(0).getUrl()).into(image);
+        } catch (IndexOutOfBoundsException e){
+            Log.e("TAG","no media");
+        }
+
         this.category.setText(mostPopularArticles.getSection());
         this.date.setText(mostPopularArticles.getPublishedDate());
         this.title.setText(mostPopularArticles.getTitle());

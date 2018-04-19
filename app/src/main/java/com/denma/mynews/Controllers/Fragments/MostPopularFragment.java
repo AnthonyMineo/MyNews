@@ -117,7 +117,9 @@ public class MostPopularFragment extends Fragment {
 
             @Override
             public void onError(Throwable e) {
-                Log.e("TAG","On Error"+Log.getStackTraceString(e));
+                Log.e("TAG","On Error "+ e.getMessage());
+                // - Signal that there is probably no internet connection
+                Toast.makeText(getContext(), "Please make sure you have access to internet !", Toast.LENGTH_LONG).show();
             }
 
             @Override

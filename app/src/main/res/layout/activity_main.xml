@@ -26,7 +26,7 @@
             android:id="@+id/activity_main_tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
+            android:background="@color/colorMainTheme"
             app:tabIndicatorColor="@color/colorSelectedTab"
             app:tabTextColor="@color/colorText"
             app:tabSelectedTextColor="@color/colorSelectedText"/>
@@ -46,6 +46,8 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/activity_main_nav_header"
-        app:menu="@menu/activity_main_menu_drawer" />
+        app:menu="@menu/activity_main_menu_drawer"
+        app:itemTextColor="@color/menu_text_color"
+        app:itemIconTint="@color/menu_text_color"/>
 
 </android.support.v4.widget.DrawerLayout>
