@@ -17,4 +17,15 @@
     <style name="AppTheme.RoundedCornerMaterialButton" parent="Widget.AppCompat.Button.Colored">
         <item name="android:background">@drawable/rounded_shape</item>
     </style>
+
+    <style name="DatePickerTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/colorMainTheme</item>
+        <item name="colorControlActivated">@color/colorMainTheme</item>
+        <item name="colorControlHighlight">@color/colorText</item>
+    </style>
+
+    <style name="MyNewsTheme" parent="AppTheme">
+        <item name="colorPrimary">@color/colorMainTheme</item>
+        <item name="colorAccent">@color/colorMainTheme</item>
+    </style>
 </resources>

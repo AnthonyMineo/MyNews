@@ -18,7 +18,8 @@
             <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/check_box_arts"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:theme="@style/MyNewsTheme"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -36,7 +37,8 @@
             <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/check_box_politics"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:theme="@style/MyNewsTheme"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -61,7 +63,8 @@
             <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/check_box_business"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:theme="@style/MyNewsTheme"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -78,7 +81,8 @@
             <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/check_box_sports"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:theme="@style/MyNewsTheme"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -102,7 +106,8 @@
             <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/check_box_culture"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:theme="@style/MyNewsTheme"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -120,7 +125,8 @@
             <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/check_box_travel"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:theme="@style/MyNewsTheme"/>
 
             <TextView
                 android:layout_width="wrap_content"
