@@ -143,7 +143,7 @@ public class SportFragment extends Fragment {
         // - Stop refreshing and clear actual list of sportArcticles
         swipeRefreshLayout.setRefreshing(false);
         sportArticles.clear();
-        sportArticles.addAll(response.getResponse().getDocs());
+        sportArticles.addAll(response.getResponse().getArticleSearchArticles());
         sportAdapter.notifyDataSetChanged();
     }
 }

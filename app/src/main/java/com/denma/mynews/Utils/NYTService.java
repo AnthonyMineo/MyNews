@@ -31,14 +31,4 @@ public interface NYTService {
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build();
-
-    Gson gson = new GsonBuilder()
-            .registerTypeAdapter(MostPopularArticles.class, new MostPopularArticles.myDeserializer())
-            .create();
-
-    public static final Retrofit retrofit2 = new Retrofit.Builder()
-            .baseUrl("https://api.nytimes.com/svc/")
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .build();
 }

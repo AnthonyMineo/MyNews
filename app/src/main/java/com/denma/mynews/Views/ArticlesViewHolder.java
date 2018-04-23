@@ -55,14 +55,14 @@ public class ArticlesViewHolder extends RecyclerView.ViewHolder {
         this.title.setText(mostPopularArticles.getTitle());
     }
 
-    public void updateWithSports(ArticleSearchArticles articleSearchDoc, RequestManager glide){
+    public void updateWithSports(ArticleSearchArticles articleSearchArticle, RequestManager glide){
         try{
-            glide.load("https://static01.nyt.com/" + articleSearchDoc.getMultimedia().get(2).getUrl()).into(image);
+            glide.load("https://static01.nyt.com/" + articleSearchArticle.getMultimedia().get(2).getUrl()).into(image);
         } catch (IndexOutOfBoundsException e){
             Log.e("TAG","no media");
         }
-        this.category.setText(articleSearchDoc.getSectionName());
-        this.date.setText(articleSearchDoc.getPubDate().substring(0, 10));
-        this.title.setText(articleSearchDoc.getSnippet());
+        this.category.setText(articleSearchArticle.getSectionName());
+        this.date.setText(articleSearchArticle.getPubDate().substring(0, 10));
+        this.title.setText(articleSearchArticle.getSnippet());
     }
 }

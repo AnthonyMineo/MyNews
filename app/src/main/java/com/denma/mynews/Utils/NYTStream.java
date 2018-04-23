@@ -23,7 +23,7 @@ public class NYTStream {
 
     // - Create a stream that will get most popular article from NYT Most Popular API
     public static Observable<MostPopularResponse> streamFetchMostPopular(){
-        NYTService NytService = NYTService.retrofit2.create(NYTService.class);
+        NYTService NytService = NYTService.retrofit.create(NYTService.class);
         return NytService.getMPArticles()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

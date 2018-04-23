@@ -9,25 +9,14 @@ public class ArticleSearchResult {
 
     @SerializedName("docs")
     @Expose
-    private List<ArticleSearchArticles> docs = null;
-    @SerializedName("meta")
-    @Expose
-    private ArticleSearchMeta meta;
+    private List<ArticleSearchArticles> articleSearchArticles = null;
 
-    public List<ArticleSearchArticles> getDocs() {
-        return docs;
+    public List<ArticleSearchArticles> getArticleSearchArticles() {
+        return articleSearchArticles;
     }
 
-    public void setDocs(List<ArticleSearchArticles> docs) {
-        this.docs = docs;
-    }
-
-    public ArticleSearchMeta getMeta() {
-        return meta;
-    }
-
-    public void setMeta(ArticleSearchMeta meta) {
-        this.meta = meta;
+    public void setArticleSearchArticles(List<ArticleSearchArticles> docs) {
+        this.articleSearchArticles = docs;
     }
 
 }
