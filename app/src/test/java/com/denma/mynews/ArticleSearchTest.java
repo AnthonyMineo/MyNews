@@ -8,6 +8,7 @@ import com.denma.mynews.Utils.NYTService;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -23,6 +24,22 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class ArticleSearchTest {
+
+    public String loadJSONFromResources(String fileName) {
+        String json = null;
+        try {
+            InputStream is = this.getClass().getClassLoader().getResourceAsStream(fileName);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
+    }
 
     @Test
     public void ArticleSearchTest() throws IOException {
@@ -44,117 +61,7 @@ public class ArticleSearchTest {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
 
-        mockWebServer.enqueue(new MockResponse().setBody("{\n" +
-                "  \"status\": \"OK\",\n" +
-                "  \"copyright\": \"Copyright (c) 2018 The New York Times Company. All Rights Reserved.\",\n" +
-                "  \"response\": {\n" +
-                "    \"docs\": [\n" +
-                "      {\n" +
-                "        \"web_url\": \"monUrlArticle\",\n" +
-                "        \"snippet\": \"MyTestTitle\",\n" +
-                "        \"abstract\": \"MLB Roundup; Atlanta Braves beat St Louis Cardinals, 6-5; other baseball news noted.\",\n" +
-                "        \"print_page\": \"4\",\n" +
-                "        \"blog\": {},\n" +
-                "        \"source\": \"The New York Times\",\n" +
-                "        \"multimedia\": [\n" +
-                "          {\n" +
-                "            \"rank\": 0,\n" +
-                "            \"subtype\": \"wide\",\n" +
-                "            \"caption\": null,\n" +
-                "            \"credit\": null,\n" +
-                "            \"type\": \"image\",\n" +
-                "            \"url\": \"images/2014/05/19/sports/BATS/BATS-thumbWide.jpg\",\n" +
-                "            \"height\": 126,\n" +
-                "            \"width\": 190,\n" +
-                "            \"legacy\": {\n" +
-                "              \"wide\": \"images/2014/05/19/sports/BATS/BATS-thumbWide.jpg\",\n" +
-                "              \"wideheight\": \"126\",\n" +
-                "              \"widewidth\": \"190\"\n" +
-                "            },\n" +
-                "            \"subType\": \"wide\",\n" +
-                "            \"crop_name\": null\n" +
-                "          },\n" +
-                "          {\n" +
-                "            \"rank\": 0,\n" +
-                "            \"subtype\": \"xlarge\",\n" +
-                "            \"caption\": null,\n" +
-                "            \"credit\": null,\n" +
-                "            \"type\": \"image\",\n" +
-                "            \"url\": \"images/2014/05/19/sports/BATS/BATS-articleLarge.jpg\",\n" +
-                "            \"height\": 501,\n" +
-                "            \"width\": 600,\n" +
-                "            \"legacy\": {\n" +
-                "              \"xlargewidth\": \"600\",\n" +
-                "              \"xlarge\": \"images/2014/05/19/sports/BATS/BATS-articleLarge.jpg\",\n" +
-                "              \"xlargeheight\": \"501\"\n" +
-                "            },\n" +
-                "            \"subType\": \"xlarge\",\n" +
-                "            \"crop_name\": null\n" +
-                "          },\n" +
-                "          {\n" +
-                "            \"rank\": 0,\n" +
-                "            \"subtype\": \"thumbnail\",\n" +
-                "            \"caption\": null,\n" +
-                "            \"credit\": null,\n" +
-                "            \"type\": \"image\",\n" +
-                "            \"url\": \"monUrlMedia\",\n" +
-                "            \"height\": 75,\n" +
-                "            \"width\": 75,\n" +
-                "            \"legacy\": {\n" +
-                "              \"thumbnailheight\": \"75\",\n" +
-                "              \"thumbnail\": \"images/2014/05/19/sports/BATS/BATS-thumbStandard.jpg\",\n" +
-                "              \"thumbnailwidth\": \"75\"\n" +
-                "            },\n" +
-                "            \"subType\": \"thumbnail\",\n" +
-                "            \"crop_name\": null\n" +
-                "          }\n" +
-                "        ],\n" +
-                "        \"headline\": {\n" +
-                "          \"main\": \"Walk and Wild Pitch Help Obama Sneak By\",\n" +
-                "          \"kicker\": \"Roundup\",\n" +
-                "          \"content_kicker\": \"Roundup\",\n" +
-                "          \"print_headline\": \"Walk and Wild Pitch Help Braves Sneak By\",\n" +
-                "          \"name\": null,\n" +
-                "          \"seo\": null,\n" +
-                "          \"sub\": null\n" +
-                "        },\n" +
-                "        \"keywords\": [\n" +
-                "          {\n" +
-                "            \"name\": \"organizations\",\n" +
-                "            \"value\": \"St Louis Cardinals\",\n" +
-                "            \"rank\": 3,\n" +
-                "            \"major\": null\n" +
-                "          },\n" +
-                "          {\n" +
-                "            \"name\": \"persons\",\n" +
-                "            \"value\": \"Obama\",\n" +
-                "            \"rank\": 2,\n" +
-                "            \"major\": \"N\"\n" +
-                "          },\n" +
-                "          {\n" +
-                "            \"name\": \"subject\",\n" +
-                "            \"value\": \"Regulation and Deregulation of Industry\",\n" +
-                "            \"rank\": 3,\n" +
-                "            \"major\": \"N\"\n" +
-                "          }\n" +
-                "        ],\n" +
-                "        \"pub_date\": \"2014-05-19T00:00:00Z\",\n" +
-                "        \"document_type\": \"article\",\n" +
-                "        \"new_desk\": \"Sports\",\n" +
-                "        \"section_name\": \"Baseball\",\n" +
-                "        \"byline\": {\n" +
-                "          \"original\": \"By THE ASSOCIATED PRESS\",\n" +
-                "          \"person\": [],\n" +
-                "          \"organization\": \"THE ASSOCIATED PRESS\"\n" +
-                "        },\n" +
-                "        \"type_of_material\": \"News\",\n" +
-                "        \"_id\": \"53795db138f0d805525a3409\",\n" +
-                "        \"word_count\": 483,\n" +
-                "        \"score\": 1\n" +
-                "      }\n" +
-                "    ]\n" +
-                "  }\n" +
-                "}"));
+        mockWebServer.enqueue(new MockResponse().setBody(loadJSONFromResources("ArticleSearch.json")));
 
         NYTService service = retrofit.create(NYTService.class);
 

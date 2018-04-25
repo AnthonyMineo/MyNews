@@ -12,14 +12,14 @@ import com.denma.mynews.R;
 
 import java.util.List;
 
-public class SportAdapter extends RecyclerView.Adapter<ArticlesViewHolder> {
+public class ArticleSearchAdapter extends RecyclerView.Adapter<ArticlesViewHolder> {
 
     // FOR DATA
     private List<ArticleSearchArticles> articleSearchArticles;
     private RequestManager glide;
 
     // CONSTRUCTOR
-    public SportAdapter(List<ArticleSearchArticles> articlesearchArticles, RequestManager glide) {
+    public ArticleSearchAdapter(List<ArticleSearchArticles> articlesearchArticles, RequestManager glide) {
         this.articleSearchArticles = articlesearchArticles;
         this.glide = glide;
     }

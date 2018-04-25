@@ -18,7 +18,7 @@ import com.denma.mynews.Models.ArticleSearchAPI.ArticleSearchResponse;
 import com.denma.mynews.R;
 import com.denma.mynews.Utils.ItemClickSupport;
 import com.denma.mynews.Utils.NYTStream;
-import com.denma.mynews.Views.SportAdapter;
+import com.denma.mynews.Views.ArticleSearchAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +42,7 @@ public class SportFragment extends Fragment {
     //FOR DATA
     private Disposable disposable;
     private List<ArticleSearchArticles> sportArticles;
-    private SportAdapter sportAdapter;
+    private ArticleSearchAdapter sportAdapter;
 
     public SportFragment() { }
 
@@ -75,7 +75,7 @@ public class SportFragment extends Fragment {
         // - Reset list
         this.sportArticles = new ArrayList<>();
         // - Create adapter passing the list of sportArticles
-        this.sportAdapter = new SportAdapter(this.sportArticles, Glide.with(this));
+        this.sportAdapter = new ArticleSearchAdapter(this.sportArticles, Glide.with(this));
         // - Attach the adapter to the recyclerview to populate items
         this.recyclerView.setAdapter(this.sportAdapter);
         // - Set layout manager to position the items

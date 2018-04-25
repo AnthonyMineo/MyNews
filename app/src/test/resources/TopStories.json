@@ -1,0 +1,80 @@
+{
+  "status": "OK",
+  "copyright": "Copyright (c) 2018 The New York Times Company. All Rights Reserved.",
+  "section": "home",
+  "last_updated": "2018-04-25T07:57:14-04:00",
+  "num_results": 45,
+  "results": [
+    {
+      "section": "World",
+      "subsection": "France",
+      "title": "UnitTestTopStories",
+      "abstract": "Here’s what you need to know to start your day.",
+      "url": "monUrlArticle",
+      "byline": "By CHRIS STANFORD",
+      "item_type": "Article",
+      "updated_date": "2018-04-23T05:58:16-04:00",
+      "created_date": "2018-04-25T05:33:08-04:00",
+      "published_date": "2018-04-25T05:33:08-04:00",
+      "material_type_facet": "",
+      "kicker": "",
+      "des_facet": [],
+      "org_facet": [],
+      "per_facet": [],
+      "geo_facet": [],
+      "multimedia": [
+        {
+          "url": "monUrlMedia",
+          "format": "Standard Thumbnail",
+          "height": 75,
+          "width": 75,
+          "type": "image",
+          "subtype": "photo",
+          "caption": "",
+          "copyright": ""
+        },
+        {
+          "url": "https://static01.nyt.com/images/2018/04/25/us/politics/25US-ambriefing-AMCORE/25US-ambriefing-AMCORE-thumbLarge.jpg",
+          "format": "thumbLarge",
+          "height": 150,
+          "width": 150,
+          "type": "image",
+          "subtype": "photo",
+          "caption": "",
+          "copyright": ""
+        },
+        {
+          "url": "https://static01.nyt.com/images/2018/04/25/us/politics/25US-ambriefing-AMCORE/merlin_137281683_bfb2b1ca-5379-4854-bec8-a0c24e3f78d6-articleInline.jpg",
+          "format": "Normal",
+          "height": 127,
+          "width": 190,
+          "type": "image",
+          "subtype": "photo",
+          "caption": "",
+          "copyright": ""
+        },
+        {
+          "url": "https://static01.nyt.com/images/2018/04/25/us/politics/25US-ambriefing-AMCORE/merlin_137281683_bfb2b1ca-5379-4854-bec8-a0c24e3f78d6-mediumThreeByTwo210.jpg",
+          "format": "mediumThreeByTwo210",
+          "height": 140,
+          "width": 210,
+          "type": "image",
+          "subtype": "photo",
+          "caption": "",
+          "copyright": ""
+        },
+        {
+          "url": "https://static01.nyt.com/images/2018/04/25/us/politics/25US-ambriefing-AMCORE/25US-ambriefing-AMCORE-superJumbo.jpg",
+          "format": "superJumbo",
+          "height": 188,
+          "width": 624,
+          "type": "image",
+          "subtype": "photo",
+          "caption": "",
+          "copyright": ""
+        }
+      ],
+      "short_url": "https://nyti.ms/2HqYSnJ"
+    }
+  ]
+}

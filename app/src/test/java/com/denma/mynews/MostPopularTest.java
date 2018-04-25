@@ -7,6 +7,7 @@ import com.denma.mynews.Utils.NYTService;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
@@ -20,6 +21,22 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import static org.junit.Assert.assertEquals;
 
 public class MostPopularTest {
+
+    public String loadJSONFromResources(String fileName) {
+        String json = null;
+        try {
+            InputStream is = this.getClass().getClassLoader().getResourceAsStream(fileName);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
+    }
 
     @Test
     public void MostPopularTest() throws IOException {
@@ -38,58 +55,7 @@ public class MostPopularTest {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
 
-        mockWebServer.enqueue(new MockResponse().setBody("{\n" +
-                "  \"status\": \"OK\",\n" +
-                "  \"copyright\": \"Copyright (c) 2018 The New York Times Company.  All Rights Reserved.\",\n" +
-                "  \"num_results\": 1936,\n" +
-                "  \"results\": [\n" +
-                "    {\n" +
-                "      \"url\": \"monUrlArticle\",\n" +
-                "      \"adx_keywords\": \"Cruz, Nikolas;Parkland, Fla, Shooting (2018);Marjory Stoneman Douglas High School (Parkland, Fla);School Shootings and Armed Attacks;Mental Health and Disorders\",\n" +
-                "      \"column\": \"Op-Ed Contributor\",\n" +
-                "      \"section\": \"Opinion\",\n" +
-                "      \"byline\": \"By ISABELLE ROBINSON\",\n" +
-                "      \"type\": \"Article\",\n" +
-                "      \"title\": \"MyTestTitle\",\n" +
-                "      \"abstract\": \"The notion that the Parkland shootings wouldn’t have occurred if students had been kinder is deeply dangerous.\",\n" +
-                "      \"published_date\": \"2018-03-27\",\n" +
-                "      \"source\": \"The New York Times\",\n" +
-                "      \"id\": 100000005820482,\n" +
-                "      \"asset_id\": 100000005820482,\n" +
-                "      \"views\": 1,\n" +
-                "      \"des_facet\": [\n" +
-                "        \"PARKLAND, FLA, SHOOTING (2018)\",\n" +
-                "        \"SCHOOL SHOOTINGS AND ARMED ATTACKS\",\n" +
-                "        \"MENTAL HEALTH AND DISORDERS\"\n" +
-                "      ],\n" +
-                "      \"org_facet\": [\n" +
-                "        \"MARJORY STONEMAN DOUGLAS HIGH SCHOOL (PARKLAND, FLA)\"\n" +
-                "      ],\n" +
-                "      \"per_facet\": [\n" +
-                "        \"CRUZ, NIKOLAS\"\n" +
-                "      ],\n" +
-                "      \"geo_facet\": \"\",\n" +
-                "      \"media\": [\n" +
-                "        {\n" +
-                "          \"type\": \"image\",\n" +
-                "          \"subtype\": \"photo\",\n" +
-                "          \"caption\": \"Nikolas Cruz on his Instagram account.\",\n" +
-                "          \"copyright\": \"Instagram\",\n" +
-                "          \"approved_for_syndication\": 0,\n" +
-                "          \"media-metadata\": [\n" +
-                "            {\n" +
-                "              \"url\": \"monUrlMedia\",\n" +
-                "              \"format\": \"square320\",\n" +
-                "              \"height\": 320,\n" +
-                "              \"width\": 320\n" +
-                "            }\n" +
-                "          ]\n" +
-                "        }\n" +
-                "      ]\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}\n" +
-                "    "));
+        mockWebServer.enqueue(new MockResponse().setBody(loadJSONFromResources("MostPopular.json")));
 
         NYTService service = retrofit.create(NYTService.class);
 

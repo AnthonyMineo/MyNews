@@ -5,9 +5,12 @@ import com.denma.mynews.Models.TopStoriesAPI.TopStoriesResponse;
 import com.denma.mynews.Utils.NYTService;
 
 import org.junit.Test;
+import org.mockito.MockitoAnnotations;
+
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
@@ -20,8 +23,25 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class TopStoriesTest {
 
+    public String loadJSONFromResources(String fileName) {
+        String json = null;
+        try {
+            InputStream is = this.getClass().getClassLoader().getResourceAsStream(fileName);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
+    }
+
     @Test
     public void TopStoriesTest() throws IOException{
+        MockitoAnnotations.initMocks(this);
         MockWebServer mockWebServer = new MockWebServer();
         Disposable disposable;
 
@@ -38,59 +58,7 @@ public class TopStoriesTest {
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build();
 
-        mockWebServer.enqueue(new MockResponse().setBody("{\n" +
-                "  \"status\": \"OK\",\n" +
-                "  \"copyright\": \"Copyright (c) 2018 The New York Times Company. All Rights Reserved.\",\n" +
-                "  \"section\": \"world\",\n" +
-                "  \"last_updated\": \"2018-04-23T10:07:09-04:00\",\n" +
-                "  \"num_results\": 39,\n" +
-                "  \"results\": [\n" +
-                "    {\n" +
-                "      \"section\": \"World\",\n" +
-                "      \"subsection\": \"France\",\n" +
-                "      \"title\": \"UnitTestTopStories\",\n" +
-                "      \"abstract\": \"Europe is outsourcing border management to distant countries, hoping to stop migrants before they cross the Mediterranean. But there may be a high moral cost.\",\n" +
-                "      \"url\": \"monUrlArticle\",\n" +
-                "      \"byline\": \"By PATRICK KINGSLEY\",\n" +
-                "      \"item_type\": \"Article\",\n" +
-                "      \"updated_date\": \"2018-04-23T23:45:09-04:00\",\n" +
-                "      \"created_date\": \"2018-04-22T23:45:09-04:00\",\n" +
-                "      \"published_date\": \"2018-04-22T23:45:09-04:00\",\n" +
-                "      \"material_type_facet\": \"\",\n" +
-                "      \"kicker\": \"\",\n" +
-                "      \"des_facet\": [\n" +
-                "        \"Refugees and Displaced Persons\",\n" +
-                "        \"Middle East and Africa Migrant Crisis\",\n" +
-                "        \"Immigration and Emigration\",\n" +
-                "        \"War Crimes, Genocide and Crimes Against Humanity\",\n" +
-                "        \"Human Rights and Human Rights Violations\"\n" +
-                "      ],\n" +
-                "      \"org_facet\": [\n" +
-                "        \"European Union\",\n" +
-                "        \"Janjaweed\"\n" +
-                "      ],\n" +
-                "      \"per_facet\": [],\n" +
-                "      \"geo_facet\": [\n" +
-                "        \"Sudan\",\n" +
-                "        \"Darfur (Sudan)\",\n" +
-                "        \"Libya\"\n" +
-                "      ],\n" +
-                "      \"multimedia\": [\n" +
-                "        {\n" +
-                "          \"url\": \"monUrlMedia\",\n" +
-                "          \"format\": \"Standard Thumbnail\",\n" +
-                "          \"height\": 75,\n" +
-                "          \"width\": 75,\n" +
-                "          \"type\": \"image\",\n" +
-                "          \"subtype\": \"photo\",\n" +
-                "          \"caption\": \"Undocumented immigrants arrested last year by Sudan’s Rapid Support Forces. The European Union has made the country a nerve center for an effort to counter human smuggling, but many migration advocates say the moral cost is high.\",\n" +
-                "          \"copyright\": \"Mohamed Nureldin Abdallah/Reuters\"\n" +
-                "        }\n" +
-                "      ],\n" +
-                "      \"short_url\": \"https://nyti.ms/2F7TuQk\"\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}"));
+        mockWebServer.enqueue(new MockResponse().setBody(loadJSONFromResources("TopStories.json")));
 
         NYTService service = retrofit.create(NYTService.class);
 

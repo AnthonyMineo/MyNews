@@ -1,0 +1,105 @@
+{
+  "status": "OK",
+  "copyright": "Copyright (c) 2018 The New York Times Company.  All Rights Reserved.",
+  "num_results": 1932,
+  "results": [
+    {
+      "url": "monUrlArticle",
+      "adx_keywords": "Cruz, Nikolas;Parkland, Fla, Shooting (2018);Marjory Stoneman Douglas High School (Parkland, Fla);School Shootings and Armed Attacks;Mental Health and Disorders",
+      "column": "Op-Ed Contributor",
+      "section": "Opinion",
+      "byline": "By ISABELLE ROBINSON",
+      "type": "Article",
+      "title": "MyTestTitle",
+      "abstract": "The notion that the Parkland shootings wouldn’t have occurred if students had been kinder is deeply dangerous.",
+      "published_date": "2018-03-27",
+      "source": "The New York Times",
+      "id": 100000005820482,
+      "asset_id": 100000005820482,
+      "views": 1,
+      "des_facet": [
+        "PARKLAND, FLA, SHOOTING (2018)",
+        "SCHOOL SHOOTINGS AND ARMED ATTACKS",
+        "MENTAL HEALTH AND DISORDERS"
+      ],
+      "org_facet": [
+        "MARJORY STONEMAN DOUGLAS HIGH SCHOOL (PARKLAND, FLA)"
+      ],
+      "per_facet": [
+        "CRUZ, NIKOLAS"
+      ],
+      "geo_facet": "",
+      "media": [
+        {
+          "type": "image",
+          "subtype": "photo",
+          "caption": "Nikolas Cruz on his Instagram account.",
+          "copyright": "Instagram",
+          "approved_for_syndication": 0,
+          "media-metadata": [
+            {
+              "url": "monUrlMedia",
+              "format": "square320",
+              "height": 320,
+              "width": 320
+            },
+            {
+              "url": "https://static01.nyt.com/images/2018/03/27/opinion/27Robinson/merlin_133877490_ffcb086d-bc7f-46a9-a088-d15c4a3c1ff8-thumbStandard.jpg",
+              "format": "Standard Thumbnail",
+              "height": 75,
+              "width": 75
+            },
+            {
+              "url": "https://static01.nyt.com/images/2018/03/27/opinion/27Robinson/merlin_133877490_ffcb086d-bc7f-46a9-a088-d15c4a3c1ff8-articleInline.jpg",
+              "format": "Normal",
+              "height": 192,
+              "width": 190
+            },
+            {
+              "url": "https://static01.nyt.com/images/2018/03/27/opinion/27Robinson/27Robinson-sfSpan.jpg",
+              "format": "Large",
+              "height": 264,
+              "width": 395
+            },
+            {
+              "url": "https://static01.nyt.com/images/2018/03/27/opinion/27Robinson/merlin_133877490_ffcb086d-bc7f-46a9-a088-d15c4a3c1ff8-jumbo.jpg",
+              "format": "Jumbo",
+              "height": 783,
+              "width": 775
+            },
+            {
+              "url": "https://static01.nyt.com/images/2018/03/27/opinion/27Robinson/merlin_133877490_ffcb086d-bc7f-46a9-a088-d15c4a3c1ff8-superJumbo.jpg",
+              "format": "superJumbo",
+              "height": 783,
+              "width": 775
+            },
+            {
+              "url": "https://static01.nyt.com/images/2018/03/27/opinion/27Robinson/merlin_133877490_ffcb086d-bc7f-46a9-a088-d15c4a3c1ff8-square640.jpg",
+              "format": "square640",
+              "height": 640,
+              "width": 640
+            },
+            {
+              "url": "https://static01.nyt.com/images/2018/03/27/opinion/27Robinson/merlin_133877490_ffcb086d-bc7f-46a9-a088-d15c4a3c1ff8-thumbLarge.jpg",
+              "format": "Large Thumbnail",
+              "height": 150,
+              "width": 150
+            },
+            {
+              "url": "https://static01.nyt.com/images/2018/03/27/opinion/27Robinson/27Robinson-mediumThreeByTwo210.jpg",
+              "format": "mediumThreeByTwo210",
+              "height": 140,
+              "width": 210
+            },
+            {
+              "url": "https://static01.nyt.com/images/2018/03/27/opinion/27Robinson/27Robinson-mediumThreeByTwo440.jpg",
+              "format": "mediumThreeByTwo440",
+              "height": 293,
+              "width": 440
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

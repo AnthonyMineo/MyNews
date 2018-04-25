@@ -20,4 +20,5 @@ android:
     - addon-google_apis-google-26
 
   licenses:
+    - 'android-sdk-license-.+'
     - '.+'
