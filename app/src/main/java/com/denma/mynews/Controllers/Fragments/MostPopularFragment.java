@@ -1,6 +1,8 @@
 package com.denma.mynews.Controllers.Fragments;
 
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.denma.mynews.Controllers.Activities.ArticleShowFromMainActivity;
 import com.denma.mynews.Models.MostPopularAPI.MostPopularArticles;
 import com.denma.mynews.Models.MostPopularAPI.MostPopularResponse;
 import com.denma.mynews.R;
@@ -79,7 +82,6 @@ public class MostPopularFragment extends Fragment {
         this.recyclerView.setAdapter(this.mostPopularAdapter);
         // - Set layout manager to position the items
         this.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
     }
 
     private void configureOnClickRecyclerView() {
@@ -90,7 +92,9 @@ public class MostPopularFragment extends Fragment {
                     // 1 - Get user from adapter
                     MostPopularArticles article = mostPopularAdapter.getArticle(position);
                     // 2 - Do something
-                    Toast.makeText(getContext(), "You clicked on article : " + article.getTitle(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getActivity(), ArticleShowFromMainActivity.class);
+                    intent.putExtra("url", article.getUrl());
+                    startActivity(intent);
                 }
             });
     }

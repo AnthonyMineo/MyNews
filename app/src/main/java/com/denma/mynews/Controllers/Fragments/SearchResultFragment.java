@@ -1,7 +1,9 @@
 package com.denma.mynews.Controllers.Fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.denma.mynews.Controllers.Activities.ArticleShowFromSearchActivity;
 import com.denma.mynews.Models.ArticleSearchAPI.ArticleSearchArticles;
 import com.denma.mynews.Models.ArticleSearchAPI.ArticleSearchResponse;
 import com.denma.mynews.R;
@@ -53,6 +56,8 @@ public class SearchResultFragment extends Fragment {
     private String beginDate;
     private String endDate;
 
+    private View view;
+
     public SearchResultFragment() { }
 
     public static SearchResultFragment newInstance() {
@@ -61,7 +66,7 @@ public class SearchResultFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_search_result, container, false);
+        view = inflater.inflate(R.layout.fragment_search_result, container, false);
         ButterKnife.bind(this, view);
         this.configureSwipeRefreshLayout();
         this.configureRecyclerView();
@@ -71,7 +76,7 @@ public class SearchResultFragment extends Fragment {
         return view;
     }
 
-    private void configureSwipeRefreshLayout(){
+    private void configureSwipeRefreshLayout() {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -81,7 +86,7 @@ public class SearchResultFragment extends Fragment {
     }
 
     // - Configure RecyclerView, Adapter, LayoutManager & glue it together
-    private void configureRecyclerView(){
+    private void configureRecyclerView() {
         // - Reset list
         this.searchResultArticles = new ArrayList<>();
         // - Create adapter passing the list of sportArticles
@@ -90,8 +95,6 @@ public class SearchResultFragment extends Fragment {
         this.recyclerView.setAdapter(this.searchResultAdapter);
         // - Set layout manager to position the items
         this.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        Log.e("Test", "coucou 1");
-
     }
 
     private void configureOnClickRecyclerView() {
@@ -102,19 +105,44 @@ public class SearchResultFragment extends Fragment {
                         // 1 - Get user from adapter
                         ArticleSearchArticles article = searchResultAdapter.getArticle(position);
                         // 2 - Do something
-                        Toast.makeText(getContext(), "You clicked on article : " + article.getSnippet(), Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getActivity(), ArticleShowFromSearchActivity.class);
+                        intent.putExtra("url", article.getWebUrl());
+                        startActivity(intent);
                     }
                 });
     }
 
-    private void configureDataFromIntent(){
-        this.queryTerm = getArguments().getString("query");
-        this.newsDesk = getArguments().getString("newsDesk");
-        this.beginDate = getArguments().getString("beginDate");
-        this.endDate = getArguments().getString("endDate");
-        String listArticlesSerializedToJson = getArguments().getString("listArticles");
-        Type listType = new TypeToken<ArrayList<ArticleSearchArticles>>(){}.getType();
-        this.intentArticles = new Gson().fromJson(listArticlesSerializedToJson, listType);
+    private void configureDataFromIntent() {
+        String listArticlesSerializedToJson;
+        if (args != null) {
+            this.queryTerm = args.getString("query");
+            this.newsDesk = args.getString("newsDesk");
+            this.beginDate = args.getString("beginDate");
+            this.endDate = args.getString("endDate");
+
+            listArticlesSerializedToJson = args.getString("listArticles");
+            Type listType = new TypeToken<ArrayList<ArticleSearchArticles>>() {}.getType();
+            this.intentArticles = new Gson().fromJson(listArticlesSerializedToJson, listType);
+
+        } else {
+            this.queryTerm = getArguments().getString("query");
+            this.newsDesk = getArguments().getString("newsDesk");
+            this.beginDate = getArguments().getString("beginDate");
+            this.endDate = getArguments().getString("endDate");
+
+            listArticlesSerializedToJson = getArguments().getString("listArticles");
+            Type listType = new TypeToken<ArrayList<ArticleSearchArticles>>() {}.getType();
+            this.intentArticles = new Gson().fromJson(listArticlesSerializedToJson, listType);
+
+            args = new Bundle();
+            args.putString("query", queryTerm);
+            args.putString("newsDesk", newsDesk);
+            args.putString("beginDate", beginDate);
+            args.putString("endDate", endDate);
+
+            listArticlesSerializedToJson = new Gson().toJson(intentArticles);
+            args.putString("listArticles", listArticlesSerializedToJson);
+        }
     }
 
     @Override
@@ -124,31 +152,31 @@ public class SearchResultFragment extends Fragment {
     }
 
     // - Execute our Stream
-    private void executeHttpRequestWithRetrofit(){
+    private void executeHttpRequestWithRetrofit() {
         // - Execute the stream subscribing to Observable defined inside NYTStream
         this.disposable = NYTStream.streamFetchArticleSearch(queryTerm, newsDesk, beginDate, endDate).subscribeWith(new DisposableObserver<ArticleSearchResponse>() {
             @Override
             public void onNext(ArticleSearchResponse response) {
-                Log.e("TAG","On Next");
+                Log.e("TAG", "On Next");
                 // - Update UI with response
                 updateUIwithRetrofit(response);
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.e("TAG","On Error "+ e.getMessage());
+                Log.e("TAG", "On Error " + e.getMessage());
                 // - Signal that there is probably no internet connection
                 Toast.makeText(getContext(), "Please make sure you have access to internet !", Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onComplete() {
-                Log.e("TAG","On Complete !!");
+                Log.e("TAG", "On Complete !!");
             }
         });
     }
 
-    private void disposeWhenDestroy(){
+    private void disposeWhenDestroy() {
         if (this.disposable != null && !this.disposable.isDisposed()) this.disposable.dispose();
     }
 
@@ -156,7 +184,7 @@ public class SearchResultFragment extends Fragment {
     // UPDATE UI
     // -------------------
 
-    private void updateUIwithRetrofit(ArticleSearchResponse response){
+    private void updateUIwithRetrofit(ArticleSearchResponse response) {
         // - Stop refreshing and clear actual list of sportArcticles
         swipeRefreshLayout.setRefreshing(false);
         searchResultArticles.clear();
@@ -164,7 +192,7 @@ public class SearchResultFragment extends Fragment {
         searchResultAdapter.notifyDataSetChanged();
     }
 
-    private void updateUIwithIntent(List<ArticleSearchArticles> articles){
+    private void updateUIwithIntent(List<ArticleSearchArticles> articles) {
         // - Stop refreshing and clear actual list of sportArcticles
         swipeRefreshLayout.setRefreshing(false);
         searchResultArticles.clear();
@@ -172,3 +200,4 @@ public class SearchResultFragment extends Fragment {
         searchResultAdapter.notifyDataSetChanged();
     }
 }
+
