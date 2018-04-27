@@ -2,8 +2,14 @@ package com.denma.mynews.Controllers.Fragments;
 
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,14 +18,27 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.denma.mynews.Controllers.Activities.SearchActivity;
+import com.denma.mynews.Controllers.Activities.SearchResultActivity;
+import com.denma.mynews.Models.ArticleSearchAPI.ArticleSearchArticles;
+import com.denma.mynews.Models.ArticleSearchAPI.ArticleSearchResponse;
 import com.denma.mynews.R;
+import com.denma.mynews.Utils.NYTStream;
+import com.google.gson.Gson;
 
+import java.io.Serializable;
 import java.util.Calendar;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 
 public class SearchFragment extends Fragment {
 
@@ -45,13 +64,23 @@ public class SearchFragment extends Fragment {
     CheckBox checkBoxCulture;
     @BindView(R.id.check_box_travel)
     CheckBox checkBoxTravel;
-    @BindView(R.id.search_button)
-    Button searchButton;
 
     private int day;
     private int month;
     private int year;
     private Calendar calendar;
+    private Disposable disposable;
+
+    private String queryTerm = "";
+    private String newsDesk = "";
+    private String arts = "";
+    private String politics = "";
+    private String business = "";
+    private String sports = "";
+    private String culture = "";
+    private String travel = "";
+    private String beginDate = null;
+    private String endDate = null;
 
     public SearchFragment() { }
 
@@ -61,7 +90,7 @@ public class SearchFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         ButterKnife.bind(this, view);
         this.configureDatePicker();
-
+        this.configureListener();
         return view;
     }
 
@@ -109,4 +138,149 @@ public class SearchFragment extends Fragment {
         dpDialog.show();
     }
 
+    private void configureListener(){
+        searchQueryTerm.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                queryTerm = searchQueryTerm.getText().toString();
+            }
+        });
+
+        checkBoxArts.setOnClickListener(new checkBoxListener());
+        checkBoxPolitics.setOnClickListener(new checkBoxListener());
+        checkBoxBusiness.setOnClickListener(new checkBoxListener());
+        checkBoxSports.setOnClickListener(new checkBoxListener());
+        checkBoxCulture.setOnClickListener(new checkBoxListener());
+        checkBoxTravel.setOnClickListener(new checkBoxListener());
+    }
+
+    @OnClick(R.id.search_button)
+    public void submit(){
+        executeHttpRequestWithRetrofit();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        this.disposeWhenDestroy();
+    }
+
+    // - Execute our Stream
+    private void executeHttpRequestWithRetrofit(){
+        // - Execute the stream subscribing to Observable defined inside NYTStream
+        newsDesk = arts + politics + business + sports + culture + travel;
+        if(queryTerm.isEmpty()){
+            Toast.makeText(getContext(), "Please choose a query term", Toast.LENGTH_SHORT).show();
+        }
+        else if(newsDesk == "")
+            Toast.makeText(getContext(), "Please choose at least one category", Toast.LENGTH_SHORT).show();
+        else {
+            if(beginDateUserChoice.getText().toString() != "")
+                beginDate = adjustDateForRequest(beginDateUserChoice.getText().toString());
+            if(endDateUserChoice.getText().toString() != "")
+                endDate =  adjustDateForRequest(endDateUserChoice.getText().toString());
+
+            this.disposable = NYTStream.streamFetchArticleSearch(queryTerm,"news_desk: (" + newsDesk + ")", beginDate , endDate).subscribeWith(new DisposableObserver<ArticleSearchResponse>() {
+                @Override
+                public void onNext(ArticleSearchResponse response) {
+                    Log.e("TAG","On Next");
+                    // - Update UI with response
+                    testingResponse(response);
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    Log.e("TAG","On Error "+ e.getMessage());
+                    // - Signal that there is probably no internet connection
+                    Toast.makeText(getContext(), "Please make sure you have access to internet !", Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onComplete() {
+                    Log.e("TAG","On Complete !!");
+                }
+            });
+        }
+    }
+
+    private void disposeWhenDestroy(){
+        if (this.disposable != null && !this.disposable.isDisposed()) this.disposable.dispose();
+    }
+
+    private void testingResponse(ArticleSearchResponse resp)
+    {
+        if (resp.getResult().getArticleSearchArticles().isEmpty()){
+            Toast.makeText(getContext(), "There is no results available.", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Intent resultIntent = new Intent(getActivity(), SearchResultActivity.class);
+            List<ArticleSearchArticles> articles = resp.getResult().getArticleSearchArticles();
+            resultIntent.putExtra("query", queryTerm);
+            resultIntent.putExtra("newsDesk", "news_desk: (" + newsDesk + ")");
+            resultIntent.putExtra("beginDate", beginDate);
+            resultIntent.putExtra("endDate", endDate);
+
+            String listArticlesSerializedToJson = new Gson().toJson(articles);
+            resultIntent.putExtra("listArticles", listArticlesSerializedToJson);
+            startActivity(resultIntent);
+        }
+    }
+
+    private String adjustDateForRequest(String date){
+        String rDay = date.substring(0, 2);
+        String rMonth = date.substring(3, 5);
+        String rYear = date.substring(6, 10);
+        String requestDate = rYear + rMonth + rDay;
+        return requestDate;
+    }
+
+    class checkBoxListener implements View.OnClickListener{
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()){
+                case R.id.check_box_arts:
+                    if(checkBoxArts.isChecked())
+                        arts = "\"Arts\"";
+                    else
+                        arts = "";
+                    break;
+                case R.id.check_box_politics:
+                    if(checkBoxPolitics.isChecked())
+                        politics = "\"Politics\"";
+                    else
+                        politics = "";
+                    break;
+                case R.id.check_box_business:
+                    if(checkBoxBusiness.isChecked())
+                        business = "\"Business\"";
+                    else
+                        business = "";
+                    break;
+                case R.id.check_box_sports:
+                    if(checkBoxSports.isChecked())
+                        sports = "\"Sports\"";
+                    else
+                        sports = "";
+                    break;
+                case R.id.check_box_culture:
+                    if(checkBoxCulture.isChecked())
+                        culture = "\"Culture\"";
+                    else
+                        culture = "";
+                    break;
+                case R.id.check_box_travel:
+                    if(checkBoxTravel.isChecked())
+                        travel = "\"Travel\"";
+                    else
+                        travel = "";
+                    break;
+            }
+        }
+    }
 }

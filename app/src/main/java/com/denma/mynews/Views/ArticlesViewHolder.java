@@ -55,7 +55,7 @@ public class ArticlesViewHolder extends RecyclerView.ViewHolder {
         this.title.setText(mostPopularArticles.getTitle());
     }
 
-    public void updateWithSports(ArticleSearchArticles articleSearchArticle, RequestManager glide){
+    public void updateWithArticleSearch(ArticleSearchArticles articleSearchArticle, RequestManager glide){
         try{
             glide.load("https://static01.nyt.com/" + articleSearchArticle.getMultimedia().get(2).getUrl()).into(image);
         } catch (IndexOutOfBoundsException e){

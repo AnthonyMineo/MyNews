@@ -37,7 +37,7 @@ public class ArticleSearchAdapter extends RecyclerView.Adapter<ArticlesViewHolde
     // UPDATE VIEW HOLDER WITH A ArticleSearchArticles
     @Override
     public void onBindViewHolder(ArticlesViewHolder viewHolder, int position) {
-        viewHolder.updateWithSports(this.articleSearchArticles.get(position), this.glide);
+        viewHolder.updateWithArticleSearch(this.articleSearchArticles.get(position), this.glide);
     }
 
     // RETURN THE TOTAL COUNT OF ITEMS IN THE LIST

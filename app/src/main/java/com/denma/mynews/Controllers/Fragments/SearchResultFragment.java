@@ -19,7 +19,10 @@ import com.denma.mynews.R;
 import com.denma.mynews.Utils.ItemClickSupport;
 import com.denma.mynews.Utils.NYTStream;
 import com.denma.mynews.Views.ArticleSearchAdapter;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,33 +34,40 @@ import io.reactivex.observers.DisposableObserver;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SportFragment extends Fragment {
+public class SearchResultFragment extends Fragment {
 
     // FOR DESIGN
-    @BindView(R.id.fragment_sport_recycler_view)
+    @BindView(R.id.fragment_search_result_recycler_view)
     RecyclerView recyclerView;
-    @BindView(R.id.fragment_sport_swipe_container)
+    @BindView(R.id.fragment_search_result_swipe_container)
     SwipeRefreshLayout swipeRefreshLayout;
 
     //FOR DATA
     private Disposable disposable;
-    private List<ArticleSearchArticles> sportArticles;
-    private ArticleSearchAdapter sportAdapter;
+    private List<ArticleSearchArticles> searchResultArticles;
+    private List<ArticleSearchArticles> intentArticles;
+    private ArticleSearchAdapter searchResultAdapter;
 
-    public SportFragment() { }
+    private String queryTerm;
+    private String newsDesk;
+    private String beginDate;
+    private String endDate;
 
-    public static SportFragment newInstance() {
-        return (new SportFragment());
+    public SearchResultFragment() { }
+
+    public static SearchResultFragment newInstance() {
+        return (new SearchResultFragment());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_sport, container, false);
+        View view = inflater.inflate(R.layout.fragment_search_result, container, false);
         ButterKnife.bind(this, view);
         this.configureSwipeRefreshLayout();
         this.configureRecyclerView();
         this.configureOnClickRecyclerView();
-        this.executeHttpRequestWithRetrofit();
+        this.configureDataFromIntent();
+        this.updateUIwithIntent(this.intentArticles);
         return view;
     }
 
@@ -73,27 +83,38 @@ public class SportFragment extends Fragment {
     // - Configure RecyclerView, Adapter, LayoutManager & glue it together
     private void configureRecyclerView(){
         // - Reset list
-        this.sportArticles = new ArrayList<>();
+        this.searchResultArticles = new ArrayList<>();
         // - Create adapter passing the list of sportArticles
-        this.sportAdapter = new ArticleSearchAdapter(this.sportArticles, Glide.with(this));
+        this.searchResultAdapter = new ArticleSearchAdapter(this.searchResultArticles, Glide.with(this));
         // - Attach the adapter to the recyclerview to populate items
-        this.recyclerView.setAdapter(this.sportAdapter);
+        this.recyclerView.setAdapter(this.searchResultAdapter);
         // - Set layout manager to position the items
         this.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        Log.e("Test", "coucou 1");
 
     }
 
     private void configureOnClickRecyclerView() {
         ItemClickSupport.addTo(recyclerView, R.layout.fragment_recycle_item)
-            .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
-                @Override
-                public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                    // 1 - Get user from adapter
-                    ArticleSearchArticles article = sportAdapter.getArticle(position);
-                    // 2 - Do something
-                    Toast.makeText(getContext(), "You clicked on article : " + article.getSnippet(), Toast.LENGTH_SHORT).show();
-                }
-            });
+                .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+                    @Override
+                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                        // 1 - Get user from adapter
+                        ArticleSearchArticles article = searchResultAdapter.getArticle(position);
+                        // 2 - Do something
+                        Toast.makeText(getContext(), "You clicked on article : " + article.getSnippet(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void configureDataFromIntent(){
+        this.queryTerm = getArguments().getString("query");
+        this.newsDesk = getArguments().getString("newsDesk");
+        this.beginDate = getArguments().getString("beginDate");
+        this.endDate = getArguments().getString("endDate");
+        String listArticlesSerializedToJson = getArguments().getString("listArticles");
+        Type listType = new TypeToken<ArrayList<ArticleSearchArticles>>(){}.getType();
+        this.intentArticles = new Gson().fromJson(listArticlesSerializedToJson, listType);
     }
 
     @Override
@@ -102,19 +123,15 @@ public class SportFragment extends Fragment {
         this.disposeWhenDestroy();
     }
 
-    // -------------------
-    // HTTP (RxJAVA)
-    // -------------------
-
     // - Execute our Stream
     private void executeHttpRequestWithRetrofit(){
         // - Execute the stream subscribing to Observable defined inside NYTStream
-        this.disposable = NYTStream.streamFetchArticleSearch(null,"news_desk: \"Sports\"", null, null).subscribeWith(new DisposableObserver<ArticleSearchResponse>() {
+        this.disposable = NYTStream.streamFetchArticleSearch(queryTerm, newsDesk, beginDate, endDate).subscribeWith(new DisposableObserver<ArticleSearchResponse>() {
             @Override
             public void onNext(ArticleSearchResponse response) {
                 Log.e("TAG","On Next");
                 // - Update UI with response
-                updateUI(response);
+                updateUIwithRetrofit(response);
             }
 
             @Override
@@ -139,11 +156,19 @@ public class SportFragment extends Fragment {
     // UPDATE UI
     // -------------------
 
-    private void updateUI(ArticleSearchResponse response){
+    private void updateUIwithRetrofit(ArticleSearchResponse response){
         // - Stop refreshing and clear actual list of sportArcticles
         swipeRefreshLayout.setRefreshing(false);
-        sportArticles.clear();
-        sportArticles.addAll(response.getResult().getArticleSearchArticles());
-        sportAdapter.notifyDataSetChanged();
+        searchResultArticles.clear();
+        searchResultArticles.addAll(response.getResult().getArticleSearchArticles());
+        searchResultAdapter.notifyDataSetChanged();
+    }
+
+    private void updateUIwithIntent(List<ArticleSearchArticles> articles){
+        // - Stop refreshing and clear actual list of sportArcticles
+        swipeRefreshLayout.setRefreshing(false);
+        searchResultArticles.clear();
+        searchResultArticles.addAll(articles);
+        searchResultAdapter.notifyDataSetChanged();
     }
 }

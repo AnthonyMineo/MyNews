@@ -70,7 +70,7 @@ public class ArticleSearchTest {
         disposable = fecthArticleSearch.subscribeWith(new DisposableObserver<ArticleSearchResponse>(){
             @Override
             public void onNext(ArticleSearchResponse articleSearchResponse) {
-                ArticleSearchArticles article = articleSearchResponse.getResponse().getArticleSearchArticles().get(0);
+                ArticleSearchArticles article = articleSearchResponse.getResult().getArticleSearchArticles().get(0);
                 sectionName[0] = article.getSectionName();
                 news_desk[0] = article.getNewDesk();
                 publishedDate[0] = article.getPubDate().substring(0,10);

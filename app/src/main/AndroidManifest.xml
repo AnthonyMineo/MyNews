@@ -11,7 +11,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity android:name=".Controllers.Activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,11 +23,24 @@
         <activity
             android:name=".Controllers.Activities.SearchActivity"
             android:label="Search"
-            android:parentActivityName=".Controllers.Activities.MainActivity" >
+            android:parentActivityName=".Controllers.Activities.MainActivity">
+
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Controllers.Activities.MainActivity" />
+        </activity>
+
+        <!-- A child of the main activity -->
+        <activity
+            android:name=".Controllers.Activities.SearchResultActivity"
+            android:label="Search Results"
+            android:parentActivityName=".Controllers.Activities.SearchActivity">
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Controllers.Activities.SearchActivity" />
         </activity>
 
     </application>

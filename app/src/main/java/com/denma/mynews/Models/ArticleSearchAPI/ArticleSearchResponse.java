@@ -7,14 +7,14 @@ public class ArticleSearchResponse {
 
     @SerializedName("response")
     @Expose
-    private ArticleSearchResult response;
+    private ArticleSearchResult result;
 
-    public ArticleSearchResult getResponse() {
-        return response;
+    public ArticleSearchResult getResult() {
+        return result;
     }
 
-    public void setResponse(ArticleSearchResult response) {
-        this.response = response;
+    public void setResult(ArticleSearchResult response) {
+        this.result = response;
     }
 
 }
