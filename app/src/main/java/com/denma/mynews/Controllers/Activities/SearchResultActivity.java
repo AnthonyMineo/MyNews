@@ -16,9 +16,11 @@ public class SearchResultActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_result);
+
         this.configureToolbar();
         this.configureAndShowSearchFragment();
     }
+
 
     private void configureToolbar(){
         //Get the toolbar (Serialise)
@@ -36,7 +38,6 @@ public class SearchResultActivity extends AppCompatActivity {
         if (searchResultFragment == null) {
             // B - Create new main fragment
             this.searchResultFragment = SearchResultFragment.newInstance();
-            searchResultFragment.setArguments(getIntent().getExtras());
             // C - Add it to FrameLayout container
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.activity_search_result_frame_layout, searchResultFragment)

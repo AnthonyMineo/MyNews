@@ -2,9 +2,12 @@ package com.denma.mynews.Controllers.Fragments;
 
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -39,6 +42,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class SearchFragment extends Fragment {
 
@@ -82,6 +87,8 @@ public class SearchFragment extends Fragment {
     private String beginDate = null;
     private String endDate = null;
 
+    private SharedPreferences mPreferences;
+    
     public SearchFragment() { }
 
     @Override
@@ -91,6 +98,8 @@ public class SearchFragment extends Fragment {
         ButterKnife.bind(this, view);
         this.configureDatePicker();
         this.configureListener();
+        // Init SharedPreferences using Default wich make it easily recoverable throught activity/fragment
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         return view;
     }
 
@@ -219,15 +228,17 @@ public class SearchFragment extends Fragment {
             Toast.makeText(getContext(), "There is no results available.", Toast.LENGTH_SHORT).show();
         }
         else {
-            Intent resultIntent = new Intent(getActivity(), SearchResultActivity.class);
-            List<ArticleSearchArticles> articles = resp.getResult().getArticleSearchArticles();
-            resultIntent.putExtra("query", queryTerm);
-            resultIntent.putExtra("newsDesk", "news_desk: (" + newsDesk + ")");
-            resultIntent.putExtra("beginDate", beginDate);
-            resultIntent.putExtra("endDate", endDate);
 
+            mPreferences.edit().putString("query", queryTerm).apply();
+            mPreferences.edit().putString("newsDesk", "news_desk: (" + newsDesk + ")").apply();
+            mPreferences.edit().putString("beginDate", beginDate).apply();
+            mPreferences.edit().putString("endDate", endDate).apply();
+
+            List<ArticleSearchArticles> articles = resp.getResult().getArticleSearchArticles();
             String listArticlesSerializedToJson = new Gson().toJson(articles);
-            resultIntent.putExtra("listArticles", listArticlesSerializedToJson);
+            mPreferences.edit().putString("listArticles", listArticlesSerializedToJson).apply();
+
+            Intent resultIntent = new Intent(getActivity(), SearchResultActivity.class);
             startActivity(resultIntent);
         }
     }

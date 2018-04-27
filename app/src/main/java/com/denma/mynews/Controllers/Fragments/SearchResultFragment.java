@@ -2,7 +2,9 @@ package com.denma.mynews.Controllers.Fragments;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -48,7 +50,7 @@ public class SearchResultFragment extends Fragment {
     //FOR DATA
     private Disposable disposable;
     private List<ArticleSearchArticles> searchResultArticles;
-    private List<ArticleSearchArticles> intentArticles;
+    private List<ArticleSearchArticles> prefArticles;
     private ArticleSearchAdapter searchResultAdapter;
 
     private String queryTerm;
@@ -56,9 +58,10 @@ public class SearchResultFragment extends Fragment {
     private String beginDate;
     private String endDate;
 
-    private View view;
+    private SharedPreferences mPreferences;
 
-    public SearchResultFragment() { }
+    public SearchResultFragment() {
+    }
 
     public static SearchResultFragment newInstance() {
         return (new SearchResultFragment());
@@ -66,13 +69,15 @@ public class SearchResultFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_search_result, container, false);
+        View view = inflater.inflate(R.layout.fragment_search_result, container, false);
         ButterKnife.bind(this, view);
+        // Init SharedPreferences using Default wich make it easily recoverable throught activity/fragment
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         this.configureSwipeRefreshLayout();
         this.configureRecyclerView();
         this.configureOnClickRecyclerView();
-        this.configureDataFromIntent();
-        this.updateUIwithIntent(this.intentArticles);
+        this.configureDataFromPref();
+        this.updateUIwithPref(this.prefArticles);
         return view;
     }
 
@@ -112,37 +117,15 @@ public class SearchResultFragment extends Fragment {
                 });
     }
 
-    private void configureDataFromIntent() {
-        String listArticlesSerializedToJson;
-        if (args != null) {
-            this.queryTerm = args.getString("query");
-            this.newsDesk = args.getString("newsDesk");
-            this.beginDate = args.getString("beginDate");
-            this.endDate = args.getString("endDate");
+    private void configureDataFromPref(){
+        this.queryTerm = mPreferences.getString("query", null);
+        this.newsDesk = mPreferences.getString("newsDesk", null);
+        this.beginDate = mPreferences.getString("beginDate", null);
+        this.endDate = mPreferences.getString("endDate", null);
 
-            listArticlesSerializedToJson = args.getString("listArticles");
-            Type listType = new TypeToken<ArrayList<ArticleSearchArticles>>() {}.getType();
-            this.intentArticles = new Gson().fromJson(listArticlesSerializedToJson, listType);
-
-        } else {
-            this.queryTerm = getArguments().getString("query");
-            this.newsDesk = getArguments().getString("newsDesk");
-            this.beginDate = getArguments().getString("beginDate");
-            this.endDate = getArguments().getString("endDate");
-
-            listArticlesSerializedToJson = getArguments().getString("listArticles");
-            Type listType = new TypeToken<ArrayList<ArticleSearchArticles>>() {}.getType();
-            this.intentArticles = new Gson().fromJson(listArticlesSerializedToJson, listType);
-
-            args = new Bundle();
-            args.putString("query", queryTerm);
-            args.putString("newsDesk", newsDesk);
-            args.putString("beginDate", beginDate);
-            args.putString("endDate", endDate);
-
-            listArticlesSerializedToJson = new Gson().toJson(intentArticles);
-            args.putString("listArticles", listArticlesSerializedToJson);
-        }
+        String listArticlesSerializedToJson = mPreferences.getString("listArticles", null);
+        Type listType = new TypeToken<ArrayList<ArticleSearchArticles>>() {}.getType();
+        this.prefArticles = new Gson().fromJson(listArticlesSerializedToJson, listType);
     }
 
     @Override
@@ -154,12 +137,13 @@ public class SearchResultFragment extends Fragment {
     // - Execute our Stream
     private void executeHttpRequestWithRetrofit() {
         // - Execute the stream subscribing to Observable defined inside NYTStream
-        this.disposable = NYTStream.streamFetchArticleSearch(queryTerm, newsDesk, beginDate, endDate).subscribeWith(new DisposableObserver<ArticleSearchResponse>() {
+        this.disposable = NYTStream.streamFetchArticleSearch(this.queryTerm, this.newsDesk, this.beginDate, this.endDate).subscribeWith(new DisposableObserver<ArticleSearchResponse>() {
             @Override
             public void onNext(ArticleSearchResponse response) {
                 Log.e("TAG", "On Next");
                 // - Update UI with response
                 updateUIwithRetrofit(response);
+
             }
 
             @Override
@@ -192,12 +176,13 @@ public class SearchResultFragment extends Fragment {
         searchResultAdapter.notifyDataSetChanged();
     }
 
-    private void updateUIwithIntent(List<ArticleSearchArticles> articles) {
+    private void updateUIwithPref(List<ArticleSearchArticles> articles) {
         // - Stop refreshing and clear actual list of sportArcticles
         swipeRefreshLayout.setRefreshing(false);
         searchResultArticles.clear();
         searchResultArticles.addAll(articles);
         searchResultAdapter.notifyDataSetChanged();
     }
+
 }
 

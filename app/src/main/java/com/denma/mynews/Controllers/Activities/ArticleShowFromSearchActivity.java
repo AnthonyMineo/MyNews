@@ -1,29 +1,37 @@
 package com.denma.mynews.Controllers.Activities;
 
+import android.content.Context;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.AttributeSet;
+import android.view.View;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
-import com.denma.mynews.Controllers.Fragments.ArticleFragment;
 import com.denma.mynews.R;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class ArticleShowFromSearchActivity extends AppCompatActivity {
-    private ArticleFragment articleFragment;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.article_web_view)
+    WebView webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article_show_from_search);
-
+        ButterKnife.bind(this);
         // - Configure each component
         this.configureToolbar();
-        this.configureAndShowArticleFragment();
+        this.configureWebView();
     }
 
     private void configureToolbar(){
-        //Get the toolbar (Serialise)
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //Set the toolbar
         setSupportActionBar(toolbar);
         // Get a support ActionBar corresponding to this toolbar
@@ -32,16 +40,9 @@ public class ArticleShowFromSearchActivity extends AppCompatActivity {
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
-    private void configureAndShowArticleFragment(){
-        articleFragment = (ArticleFragment) getSupportFragmentManager().findFragmentById(R.id.activity_show_from_search_article_frame_layout);
-        if (articleFragment == null) {
-            // B - Create new main fragment
-            this.articleFragment = ArticleFragment.newInstance();
-            articleFragment.setArguments(getIntent().getExtras());
-            // C - Add it to FrameLayout container
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.activity_show_from_search_article_frame_layout, articleFragment)
-                    .commit();
-        }
+    private void configureWebView(){
+        String url = getIntent().getExtras().getString("url");
+        webView.loadUrl(url);
+        webView.setWebViewClient(new WebViewClient());
     }
 }

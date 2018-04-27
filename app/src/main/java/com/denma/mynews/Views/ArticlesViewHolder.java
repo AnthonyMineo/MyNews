@@ -62,7 +62,11 @@ public class ArticlesViewHolder extends RecyclerView.ViewHolder {
             Log.e("TAG","no media");
         }
         this.category.setText(articleSearchArticle.getSectionName());
-        this.date.setText(articleSearchArticle.getPubDate().substring(0, 10));
+        try {
+            this.date.setText(articleSearchArticle.getPubDate().substring(0, 10));
+        }catch (Exception e){
+
+        }
         this.title.setText(articleSearchArticle.getSnippet());
     }
 }
