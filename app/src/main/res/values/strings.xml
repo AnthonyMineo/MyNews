@@ -32,8 +32,7 @@
     <string name="check_box_sports">Sports</string>
     <string name="check_box_culture">Culture</string>
     <string name="check_box_travel">Travel</string>
+    <string name="notifications_text">Enable notifications (once per day - 12:00)</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

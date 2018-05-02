@@ -11,5 +11,18 @@
         android:icon="@drawable/ic_more_vert_white_24dp"
         app:showAsAction="ifRoom"
         android:title="@string/menu_tool_2">
+        <menu>
+            <item
+                android:id="@+id/activity_main_more_notifications"
+                android:title="@string/navigation_drawer_more_item_1"/>
+
+            <item
+                android:id="@+id/activity_main_more_help"
+                android:title="@string/navigation_drawer_more_item_2"/>
+
+            <item
+                android:id="@+id/activity_main_more_about"
+                android:title="@string/navigation_drawer_more_item_3"/>
+        </menu>
     </item>
 </menu>

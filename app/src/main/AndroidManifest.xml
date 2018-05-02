@@ -19,7 +19,8 @@
             </intent-filter>
         </activity>
 
-        <!-- A child of the main activity -->
+        <!-- MAIN ACTIVITY CHILDREN -->
+
         <activity
             android:name=".Controllers.Activities.SearchActivity"
             android:label="Search"
@@ -31,19 +32,17 @@
                 android:value=".Controllers.Activities.MainActivity" />
         </activity>
 
-        <!-- A child of search activity -->
         <activity
-            android:name=".Controllers.Activities.SearchResultActivity"
-            android:label="Search Results"
-            android:parentActivityName=".Controllers.Activities.SearchActivity">
+            android:name=".Controllers.Activities.NotificationActivity"
+            android:label="Notifications"
+            android:parentActivityName=".Controllers.Activities.MainActivity">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Controllers.Activities.SearchActivity" />
+                android:value=".Controllers.Activities.MainActivity" />
         </activity>
 
-        <!-- A child of the main activity -->
         <activity
             android:name=".Controllers.Activities.ArticleShowFromMainActivity"
             android:label="Article"
@@ -55,7 +54,21 @@
                 android:value=".Controllers.Activities.MainActivity" />
         </activity>
 
-        <!-- A child of search activity -->
+        <!-- SEARCH ACTIVITY CHILDREN -->
+
+        <activity
+            android:name=".Controllers.Activities.SearchResultActivity"
+            android:label="Search Results"
+            android:parentActivityName=".Controllers.Activities.SearchActivity">
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Controllers.Activities.SearchActivity" />
+        </activity>
+
+        <!-- SEARCH RESULT ACTIVITY CHILDREN -->
+
         <activity
             android:name=".Controllers.Activities.ArticleShowFromSearchActivity"
             android:label="Article"
@@ -64,8 +77,14 @@
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Controllers.Activities.ArticleShowFromSearchActivity" />
+                android:value=".Controllers.Activities.SearchResultActivity" />
         </activity>
+
+        <!-- ALARM RECEIVER -->
+
+        <receiver
+            android:name=".Utils.AlarmReceiver"
+            android:exported="true" />
 
     </application>
 

@@ -114,7 +114,7 @@
 
     </LinearLayout>
 
-    <!-- Bottom portion : Category + search button -->
+    <!-- Bottom portion : Category -->
     <include
         layout="@layout/bottom_portion"
         android:layout_width="match_parent"

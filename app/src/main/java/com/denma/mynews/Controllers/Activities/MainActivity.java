@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.denma.mynews.Views.PageAdapter;
 import com.denma.mynews.Controllers.Fragments.MostPopularFragment;
@@ -136,10 +135,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // - Handle actions on menu items
         switch (item.getItemId()) {
             case R.id.menu_activity_main_search:
+                // - Launch SearchActivity
                 launchSearchActivity();
                 return true;
-            case R.id.menu_activity_main_more:
-                Toast.makeText(this, "soon", Toast.LENGTH_LONG).show();
+            case R.id.activity_main_more_notifications:
+                // - Launch NotificationsActivity
+                launchNotificationActivity();
+                return true;
+            case R.id.activity_main_more_help:
+                // - Launch help
+                return true;
+            case R.id.activity_main_more_about:
+                // - Launch about
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -172,7 +179,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 this.showFragment(FRAGMENT_SPORTS);
                 break;
             case R.id.activity_main_drawer_search:
+                // - Launch SearchActivity
                 launchSearchActivity();
+            case R.id.activity_main_drawer_notifications:
+                // - Launch NotificationsActivity
+                launchNotificationActivity();
             default:
                 break;
         }
@@ -241,5 +252,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void launchSearchActivity(){
         Intent searchActivityIntent = new Intent(MainActivity.this, SearchActivity.class);
         this.startActivity(searchActivityIntent);
+    }
+
+    private void launchNotificationActivity(){
+        Intent notifActivityIntent = new Intent(MainActivity.this, NotificationActivity.class);
+        this.startActivity(notifActivityIntent);
     }
 }
