@@ -80,7 +80,7 @@ public class NotificationFragment extends Fragment {
     private void configureDataFromPref(){
         this.queryTerm = mPreferences.getString("queryTerm", "");
         searchQueryTerm.setText(queryTerm);
-        this.newsDesk = mPreferences.getString("newsDesk", "");
+        this.newsDesk = mPreferences.getString("newsDesk2", "");
         if(newsDesk.contains("Politics")) {
             checkBoxPolitics.setChecked(true);
             politics = "\"Politics\"";
@@ -162,7 +162,7 @@ public class NotificationFragment extends Fragment {
     private void configureAlarmManager(){
         Intent alarmIntent = new Intent(getActivity(), AlarmReceiver.class);
         alarmIntent.putExtra("queryTerm", this.queryTerm);
-        alarmIntent.putExtra("newsDesk", this.newsDesk);
+        alarmIntent.putExtra("newsDesk2", this.newsDesk);
         pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
@@ -209,7 +209,7 @@ public class NotificationFragment extends Fragment {
             }
             mySwitch.setChecked(false);
             newsDesk = arts + politics + business + sports + culture + travel;
-            mPreferences.edit().putString("newsDesk", newsDesk).apply();
+            mPreferences.edit().putString("newsDesk2", newsDesk).apply();
         }
     }
 

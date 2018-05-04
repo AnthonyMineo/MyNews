@@ -36,7 +36,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         this.context = context;
         this.queryTerm = intent.getStringExtra("queryTerm");
-        this.newsDesk = intent.getStringExtra("newsDesk");
+        this.newsDesk = intent.getStringExtra("newsDesk2");
 
         this.calendar = Calendar.getInstance();
         this.day = calendar.get(Calendar.DAY_OF_MONTH);

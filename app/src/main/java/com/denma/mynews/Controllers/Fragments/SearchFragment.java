@@ -220,20 +220,20 @@ public class SearchFragment extends Fragment {
     private void testingResponse(ArticleSearchResponse resp)
     {
         if (resp.getResult().getArticleSearchArticles().isEmpty()){
-            // 1. Instantiate an AlertDialog.Builder with its constructor
+            // - Instantiate an AlertDialog.Builder with its constructor
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),R.style.DialogTheme);
-            // Add the buttons
+            // - Add the buttons
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     dialog.cancel();
                 }
             });
 
-            // 2. Chain together various setter methods to set the dialog characteristics
+            // - Chain together various setter methods to set the dialog characteristics
             builder.setMessage(R.string.alert_message)
                     .setTitle(R.string.alert_title);
 
-            // 3. Get the AlertDialog from create()
+            // - Get the AlertDialog from create() and display it
             AlertDialog dialog = builder.create();
             dialog.show();
         }

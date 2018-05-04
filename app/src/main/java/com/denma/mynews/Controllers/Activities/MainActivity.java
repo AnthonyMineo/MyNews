@@ -1,5 +1,7 @@
 package com.denma.mynews.Controllers.Activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -11,8 +13,11 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.denma.mynews.Views.PageAdapter;
 import com.denma.mynews.Controllers.Fragments.MostPopularFragment;
@@ -146,7 +151,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 // - Launch help
                 return true;
             case R.id.activity_main_more_about:
-                // - Launch about
+                // - Launch About AlertDialog
+                launchAbout();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -184,6 +190,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.activity_main_drawer_notifications:
                 // - Launch NotificationsActivity
                 launchNotificationActivity();
+            case R.id.activity_main_drawer_about:
+                // - Launch About AlertDialog
+                launchAbout();
             default:
                 break;
         }
@@ -257,5 +266,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void launchNotificationActivity(){
         Intent notifActivityIntent = new Intent(MainActivity.this, NotificationActivity.class);
         this.startActivity(notifActivityIntent);
+    }
+
+    private void launchAbout(){
+        ImageView image = new ImageView(this);
+        image.setImageResource(R.drawable.poweredby_nytimes_200b);
+
+        // - Instantiate an AlertDialog.Builder with its constructor
+        AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.DialogTheme);
+
+
+        // - Add the buttons
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+
+        // - Chain together various setter methods to set the dialog characteristics
+        builder.setView(image)
+                .setMessage(R.string.about_message)
+                .setTitle(R.string.about_title);
+
+        // - Get the AlertDialog from create() and display it
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }
