@@ -1,31 +1,28 @@
 package com.denma.mynews.Controllers.Fragments;
 
 
+import android.app.AlertDialog;
+import android.app.Application;
 import android.app.DatePickerDialog;
-import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.denma.mynews.Controllers.Activities.SearchActivity;
 import com.denma.mynews.Controllers.Activities.SearchResultActivity;
 import com.denma.mynews.Models.ArticleSearchAPI.ArticleSearchArticles;
 import com.denma.mynews.Models.ArticleSearchAPI.ArticleSearchResponse;
@@ -33,7 +30,6 @@ import com.denma.mynews.R;
 import com.denma.mynews.Utils.NYTStream;
 import com.google.gson.Gson;
 
-import java.io.Serializable;
 import java.util.Calendar;
 import java.util.List;
 
@@ -43,7 +39,6 @@ import butterknife.OnClick;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 
-import static android.content.Context.MODE_PRIVATE;
 
 public class SearchFragment extends Fragment {
 
@@ -225,7 +220,22 @@ public class SearchFragment extends Fragment {
     private void testingResponse(ArticleSearchResponse resp)
     {
         if (resp.getResult().getArticleSearchArticles().isEmpty()){
-            Toast.makeText(getContext(), "There is no results available.", Toast.LENGTH_SHORT).show();
+            // 1. Instantiate an AlertDialog.Builder with its constructor
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),R.style.DialogTheme);
+            // Add the buttons
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.cancel();
+                }
+            });
+
+            // 2. Chain together various setter methods to set the dialog characteristics
+            builder.setMessage(R.string.alert_message)
+                    .setTitle(R.string.alert_title);
+
+            // 3. Get the AlertDialog from create()
+            AlertDialog dialog = builder.create();
+            dialog.show();
         }
         else {
 

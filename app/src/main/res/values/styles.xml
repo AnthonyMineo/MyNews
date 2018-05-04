@@ -27,4 +27,8 @@
         <item name="colorPrimary">@color/colorMainTheme</item>
         <item name="colorAccent">@color/colorMainTheme</item>
     </style>
+
+    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/colorMainTheme</item>
+    </style>
 </resources>
