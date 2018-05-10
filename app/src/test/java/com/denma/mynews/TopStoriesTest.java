@@ -5,7 +5,6 @@ import com.denma.mynews.Models.TopStoriesAPI.TopStoriesResponse;
 import com.denma.mynews.Utils.NYTService;
 
 import org.junit.Test;
-import org.mockito.MockitoAnnotations;
 
 import static org.junit.Assert.*;
 
@@ -41,7 +40,6 @@ public class TopStoriesTest {
 
     @Test
     public void TopStoriesTest() throws IOException{
-        MockitoAnnotations.initMocks(this);
         MockWebServer mockWebServer = new MockWebServer();
         Disposable disposable;
 
