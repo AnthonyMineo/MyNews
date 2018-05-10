@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">MyNews</string>
 
+    <string name="on_error">Please make sure you have access to internet !</string>
+
     <!-- Used in NavigationDrawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -33,10 +35,26 @@
     <string name="check_box_culture">Culture</string>
     <string name="check_box_travel">Travel</string>
     <string name="notifications_text">Enable notifications (once per day - 12:00)</string>
+    <string name="error_query">You need to choose a query term</string>
+    <string name="error_category">You need to select at least one category</string>
+
+    <!--Used in notifications -->
+    <string name="title_notif_1">News Articles !</string>
+    <string name="text_notif_1">You have some noews for your parameters</string>
+    <string name="title_notif_2">No News !</string>
+    <string name="text_notif_2">There is no news for your parameters</string>
+    <string name="set_notif">Notifications Set !</string>
+    <string name="cancel_notif">Notifications Cancel !</string>
 
     <!-- Used in AlertDialog -->
     <string name="alert_title">Oups !</string>
     <string name="alert_message">There is no result available for your search</string>
     <string name="about_message">Application created by Anthony MINEO</string>
     <string name="about_title">About</string>
+
+    <!-- Used in Help -->
+    <string name="button_1_help">NEXT</string>
+    <string name="button_2_help">OK</string>
+    <string name="category_help">You can acces to articles from differents categories by dragging or clicking on them</string>
+    <string name="tools_help">You can search for a list of articles, base on NYT data base, with differents parameters. You can also allow the app to send you notifications (at 12:00)</string>
 </resources>

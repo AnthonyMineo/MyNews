@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.denma.mynews">
 
+    <!-- PERMISSION -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -44,7 +45,7 @@
         </activity>
 
         <activity
-            android:name=".Controllers.Activities.ArticleShowFromMainActivity"
+            android:name=".Controllers.Activities.ArticleShowActivity"
             android:label="Article"
             android:parentActivityName=".Controllers.Activities.MainActivity">
 
@@ -54,30 +55,17 @@
                 android:value=".Controllers.Activities.MainActivity" />
         </activity>
 
-        <!-- SEARCH ACTIVITY CHILDREN -->
+        <!-- SEARCH ACTIVITY CHILDREN-->
 
         <activity
             android:name=".Controllers.Activities.SearchResultActivity"
-            android:label="Search Results"
+            android:label="Results"
             android:parentActivityName=".Controllers.Activities.SearchActivity">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Controllers.Activities.SearchActivity" />
-        </activity>
-
-        <!-- SEARCH RESULT ACTIVITY CHILDREN -->
-
-        <activity
-            android:name=".Controllers.Activities.ArticleShowFromSearchActivity"
-            android:label="Article"
-            android:parentActivityName=".Controllers.Activities.SearchResultActivity">
-
-            <!-- Parent activity meta-data to support 4.0 and lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Controllers.Activities.SearchResultActivity" />
         </activity>
 
         <!-- ALARM RECEIVER -->

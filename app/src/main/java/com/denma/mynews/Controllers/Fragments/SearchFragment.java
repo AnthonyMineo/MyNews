@@ -2,7 +2,6 @@ package com.denma.mynews.Controllers.Fragments;
 
 
 import android.app.AlertDialog;
-import android.app.Application;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,7 +11,6 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -120,6 +118,7 @@ public class SearchFragment extends Fragment {
     }
 
     private void DateDialog(final View view){
+        // - Allow the user to pick the date he what from the datePicker widget
         DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener(){
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
@@ -180,10 +179,10 @@ public class SearchFragment extends Fragment {
         // - Execute the stream subscribing to Observable defined inside NYTStream
         newsDesk = arts + politics + business + sports + culture + travel;
         if(queryTerm.isEmpty()){
-            Toast.makeText(getContext(), "Please choose a query term", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.error_query, Toast.LENGTH_SHORT).show();
         }
         else if(newsDesk == "")
-            Toast.makeText(getContext(), "Please choose at least one category", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.error_category, Toast.LENGTH_SHORT).show();
         else {
             if(beginDateUserChoice.getText().toString() != "")
                 beginDate = adjustDateForRequest(beginDateUserChoice.getText().toString());
@@ -193,21 +192,21 @@ public class SearchFragment extends Fragment {
             this.disposable = NYTStream.streamFetchArticleSearch(queryTerm,"news_desk: (" + newsDesk + ")", beginDate , endDate).subscribeWith(new DisposableObserver<ArticleSearchResponse>() {
                 @Override
                 public void onNext(ArticleSearchResponse response) {
-                    Log.e("TAG","On Next");
+                    //Log.e("TAG","On Next");
                     // - Update UI with response
                     testingResponse(response);
                 }
 
                 @Override
                 public void onError(Throwable e) {
-                    Log.e("TAG","On Error "+ e.getMessage());
+                    //Log.e("TAG","On Error "+ e.getMessage());
                     // - Signal that there is probably no internet connection
-                    Toast.makeText(getContext(), "Please make sure you have access to internet !", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), R.string.on_error, Toast.LENGTH_LONG).show();
                 }
 
                 @Override
                 public void onComplete() {
-                    Log.e("TAG","On Complete !!");
+                    //Log.e("TAG","On Complete !!");
                 }
             });
         }
@@ -223,7 +222,7 @@ public class SearchFragment extends Fragment {
             // - Instantiate an AlertDialog.Builder with its constructor
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),R.style.DialogTheme);
             // - Add the buttons
-            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton(R.string.button_2_help, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     dialog.cancel();
                 }
@@ -238,7 +237,7 @@ public class SearchFragment extends Fragment {
             dialog.show();
         }
         else {
-
+            // - Launch ResultActivity if there is Articles
             mPreferences.edit().putString("query", queryTerm).apply();
             mPreferences.edit().putString("newsDesk", "news_desk: (" + newsDesk + ")").apply();
             mPreferences.edit().putString("beginDate", beginDate).apply();
@@ -254,6 +253,7 @@ public class SearchFragment extends Fragment {
     }
 
     private String adjustDateForRequest(String date){
+        // - Change the date to fit the request date API format
         String rDay = date.substring(0, 2);
         String rMonth = date.substring(3, 5);
         String rYear = date.substring(6, 10);

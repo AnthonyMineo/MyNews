@@ -1,7 +1,6 @@
 package com.denma.mynews.Views;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -35,7 +34,7 @@ public class ArticlesViewHolder extends RecyclerView.ViewHolder {
         try{
             glide.load(topStoriesArticles.getMultimedia().get(0).getUrl()).into(image);
         } catch (IndexOutOfBoundsException e){
-            Log.e("TAG","no media");
+            //Log.e("TAG","no media");
         }
 
         this.category.setText(topStoriesArticles.getSection() + " > " + topStoriesArticles.getSubsection());
@@ -47,7 +46,7 @@ public class ArticlesViewHolder extends RecyclerView.ViewHolder {
         try{
             glide.load(mostPopularArticles.getMedia().get(0).getMediaMetadata().get(0).getUrl()).into(image);
         } catch (IndexOutOfBoundsException e){
-            Log.e("TAG","no media");
+            //Log.e("TAG","no media");
         }
 
         this.category.setText(mostPopularArticles.getSection());
@@ -59,7 +58,7 @@ public class ArticlesViewHolder extends RecyclerView.ViewHolder {
         try{
             glide.load("https://static01.nyt.com/" + articleSearchArticle.getMultimedia().get(2).getUrl()).into(image);
         } catch (IndexOutOfBoundsException e){
-            Log.e("TAG","no media");
+            //Log.e("TAG","no media");
         }
         this.category.setText(articleSearchArticle.getSectionName());
         try {

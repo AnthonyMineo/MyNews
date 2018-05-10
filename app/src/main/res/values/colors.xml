@@ -8,4 +8,5 @@
     <color name="colorSelectedText">#FFFFFF</color>
     <color name="colorSelectedTab">#FFD700</color>
     <color name="colorSubMenuItem">#000000</color>
+    <color name="colorShowCaseBackground">#E699CCFF</color>
 </resources>

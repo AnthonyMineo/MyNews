@@ -5,19 +5,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.denma.mynews.Controllers.Activities.ArticleShowFromSearchActivity;
+import com.denma.mynews.Controllers.Activities.ArticleShowActivity;
 import com.denma.mynews.Models.ArticleSearchAPI.ArticleSearchArticles;
 import com.denma.mynews.Models.ArticleSearchAPI.ArticleSearchResponse;
 import com.denma.mynews.R;
@@ -36,9 +34,7 @@ import butterknife.ButterKnife;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 
-/**
- * A simple {@link Fragment} subclass.
- */
+
 public class SearchResultFragment extends Fragment {
 
     // FOR DESIGN
@@ -110,8 +106,9 @@ public class SearchResultFragment extends Fragment {
                         // 1 - Get user from adapter
                         ArticleSearchArticles article = searchResultAdapter.getArticle(position);
                         // 2 - Do something
-                        Intent intent = new Intent(getActivity(), ArticleShowFromSearchActivity.class);
+                        Intent intent = new Intent(getActivity(), ArticleShowActivity.class);
                         intent.putExtra("url", article.getWebUrl());
+                        intent.putExtra("parent", "SearchResultActivity");
                         startActivity(intent);
                     }
                 });
@@ -140,7 +137,7 @@ public class SearchResultFragment extends Fragment {
         this.disposable = NYTStream.streamFetchArticleSearch(this.queryTerm, this.newsDesk, this.beginDate, this.endDate).subscribeWith(new DisposableObserver<ArticleSearchResponse>() {
             @Override
             public void onNext(ArticleSearchResponse response) {
-                Log.e("TAG", "On Next");
+                //Log.e("TAG", "On Next");
                 // - Update UI with response
                 updateUIwithRetrofit(response);
 
@@ -148,14 +145,14 @@ public class SearchResultFragment extends Fragment {
 
             @Override
             public void onError(Throwable e) {
-                Log.e("TAG", "On Error " + e.getMessage());
+                //Log.e("TAG", "On Error " + e.getMessage());
                 // - Signal that there is probably no internet connection
-                Toast.makeText(getContext(), "Please make sure you have access to internet !", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), R.string.on_error, Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onComplete() {
-                Log.e("TAG", "On Complete !!");
+                //Log.e("TAG", "On Complete !!");
             }
         });
     }

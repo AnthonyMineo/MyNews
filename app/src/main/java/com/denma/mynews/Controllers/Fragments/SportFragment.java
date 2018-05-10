@@ -7,14 +7,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.denma.mynews.Controllers.Activities.ArticleShowFromMainActivity;
+import com.denma.mynews.Controllers.Activities.ArticleShowActivity;
 import com.denma.mynews.Models.ArticleSearchAPI.ArticleSearchArticles;
 import com.denma.mynews.Models.ArticleSearchAPI.ArticleSearchResponse;
 import com.denma.mynews.R;
@@ -30,9 +29,7 @@ import butterknife.ButterKnife;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 
-/**
- * A simple {@link Fragment} subclass.
- */
+
 public class SportFragment extends Fragment {
 
     // FOR DESIGN
@@ -93,8 +90,9 @@ public class SportFragment extends Fragment {
                     // 1 - Get user from adapter
                     ArticleSearchArticles article = sportAdapter.getArticle(position);
                     // 2 - Do something
-                    Intent intent = new Intent(getActivity(), ArticleShowFromMainActivity.class);
+                    Intent intent = new Intent(getActivity(), ArticleShowActivity.class);
                     intent.putExtra("url", article.getWebUrl());
+                    intent.putExtra("parent", "MainActivity");
                     startActivity(intent);
                 }
             });
@@ -116,21 +114,21 @@ public class SportFragment extends Fragment {
         this.disposable = NYTStream.streamFetchArticleSearch(null,"news_desk: \"Sports\"", null, null).subscribeWith(new DisposableObserver<ArticleSearchResponse>() {
             @Override
             public void onNext(ArticleSearchResponse response) {
-                Log.e("TAG","On Next");
+                //Log.e("TAG","On Next");
                 // - Update UI with response
                 updateUI(response);
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.e("TAG","On Error "+ e.getMessage());
+                //Log.e("TAG","On Error "+ e.getMessage());
                 // - Signal that there is probably no internet connection
-                Toast.makeText(getContext(), "Please make sure you have access to internet !", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), R.string.on_error, Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onComplete() {
-                Log.e("TAG","On Complete !!");
+                //Log.e("TAG","On Complete !!");
             }
         });
     }

@@ -1,12 +1,14 @@
 package com.denma.mynews.Utils;
 
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.denma.mynews.Controllers.Activities.MainActivity;
 import com.denma.mynews.Models.ArticleSearchAPI.ArticleSearchArticles;
 import com.denma.mynews.Models.ArticleSearchAPI.ArticleSearchResponse;
 import com.denma.mynews.R;
@@ -84,21 +86,41 @@ public class AlarmReceiver extends BroadcastReceiver {
         List<ArticleSearchArticles> articles = response.getResult().getArticleSearchArticles();
         this.todayNewsSize = articles.size();
         if(todayNewsSize >= 1){
-            sendNotification();
+            sendNotification(1);
+            Log.e("Notif", "Send !");
+        }
+        else {
+            sendNotification(2);
             Log.e("Notif", "Send !");
         }
         this.disposable.dispose();
     }
 
     // Send simple notification withouy any action on click, just informative
-    private void sendNotification(){
+    private void sendNotification(int answer) {
+        // Create an explicit intent for an Activity in your app
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+
         String NOTIFICATION_ID = "channel_id_01";
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_ID)
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentTitle("New Articles !")
-                .setContentText("You have some news !")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                .setSmallIcon(R.drawable.ic_launcher_foreground);
 
+        if (answer == 1) {
+            builder.setContentTitle(context.getResources().getString(R.string.title_notif_1))
+                    .setContentText(context.getResources().getString(R.string.text_notif_1))
+                    .setContentIntent(pendingIntent)
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setAutoCancel(true);
+        }
+        else {
+            builder.setContentTitle(context.getResources().getString(R.string.title_notif_2))
+                    .setContentText(context.getResources().getString(R.string.text_notif_2))
+                    .setContentIntent(pendingIntent)
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setAutoCancel(true);
+        }
 
         NotificationManager nManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         nManager.notify(1, builder.build());

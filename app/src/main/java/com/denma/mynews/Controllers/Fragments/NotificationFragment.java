@@ -28,9 +28,7 @@ import java.util.Calendar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * A simple {@link Fragment} subclass.
- */
+
 public class NotificationFragment extends Fragment {
 
     @BindView(R.id.search_query_term_text_input_edit_text)
@@ -78,6 +76,7 @@ public class NotificationFragment extends Fragment {
     }
 
     private void configureDataFromPref(){
+        // - Check Preferences and init data from founded values
         this.queryTerm = mPreferences.getString("queryTerm", "");
         searchQueryTerm.setText(queryTerm);
         this.newsDesk = mPreferences.getString("newsDesk2", "");
@@ -111,6 +110,7 @@ public class NotificationFragment extends Fragment {
     }
 
     private void configureListener(){
+        // - Configure Listener for each element that can change state
         searchQueryTerm.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
@@ -138,11 +138,11 @@ public class NotificationFragment extends Fragment {
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if(isChecked){
                     if(queryTerm.isEmpty()){
-                        Toast.makeText(getContext(), "Please choose a query term", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.error_query, Toast.LENGTH_SHORT).show();
                         mySwitch.setChecked(false);
                     }
                     else if(newsDesk == "") {
-                        Toast.makeText(getContext(), "Please choose at least one category", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.error_category, Toast.LENGTH_SHORT).show();
                         mySwitch.setChecked(false);
                     }
                     else {
@@ -220,7 +220,7 @@ public class NotificationFragment extends Fragment {
     // - Start Alarm
     private void startAlarm() {
 
-        // Define when the alarm will be firing
+        // - Define when the alarm will be firing
         long alarmUp = 0;
         Calendar midday = Calendar.getInstance();
         Calendar now = Calendar.getInstance();
@@ -228,7 +228,7 @@ public class NotificationFragment extends Fragment {
         midday.set(Calendar.MINUTE, 00);
         midday.set(Calendar.SECOND, 00);
 
-        // Allow us to know if alarm time is past or not -> don't start it if it's past
+        // - Allow us to know if alarm time is past or not -> don't start it if it's past
         if(midday.getTimeInMillis() <= now.getTimeInMillis())
             alarmUp = midday.getTimeInMillis() + (AlarmManager.INTERVAL_DAY+1);
         else
@@ -236,13 +236,13 @@ public class NotificationFragment extends Fragment {
 
         AlarmManager manager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
         manager.setRepeating(AlarmManager.RTC_WAKEUP, alarmUp, AlarmManager.INTERVAL_DAY, pendingIntent);
-        Toast.makeText(getActivity(), "Notifications Set !", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), R.string.set_notif, Toast.LENGTH_SHORT).show();
     }
 
     // - Stop Alarm
     private void stopAlarm() {
         AlarmManager manager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
         manager.cancel(pendingIntent);
-        Toast.makeText(getActivity(), "Notifications Canceled !", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), R.string.cancel_notif, Toast.LENGTH_SHORT).show();
     }
 }

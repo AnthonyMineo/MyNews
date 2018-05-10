@@ -2,20 +2,18 @@ package com.denma.mynews.Controllers.Fragments;
 
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.denma.mynews.Controllers.Activities.ArticleShowFromMainActivity;
+import com.denma.mynews.Controllers.Activities.ArticleShowActivity;
 import com.denma.mynews.Models.MostPopularAPI.MostPopularArticles;
 import com.denma.mynews.Models.MostPopularAPI.MostPopularResponse;
 import com.denma.mynews.R;
@@ -92,8 +90,9 @@ public class MostPopularFragment extends Fragment {
                     // 1 - Get user from adapter
                     MostPopularArticles article = mostPopularAdapter.getArticle(position);
                     // 2 - Do something
-                    Intent intent = new Intent(getActivity(), ArticleShowFromMainActivity.class);
+                    Intent intent = new Intent(getActivity(), ArticleShowActivity.class);
                     intent.putExtra("url", article.getUrl());
+                    intent.putExtra("parent", "MainActivity");
                     startActivity(intent);
                 }
             });
@@ -114,21 +113,21 @@ public class MostPopularFragment extends Fragment {
         this.disposable = NYTStream.streamFetchMostPopular().subscribeWith(new DisposableObserver<MostPopularResponse>() {
             @Override
             public void onNext(MostPopularResponse response) {
-                Log.e("TAG","On Next");
+                // Log.e("TAG","On Next");
                 // - Update UI with response
                 updateUI(response);
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.e("TAG","On Error "+ e.getMessage());
+                // Log.e("TAG","On Error "+ e.getMessage());
                 // - Signal that there is probably no internet connection
-                Toast.makeText(getContext(), "Please make sure you have access to internet !", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), R.string.on_error, Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onComplete() {
-                Log.e("TAG","On Complete !!");
+                //Log.e("TAG","On Complete !!");
             }
         });
     }

@@ -13,10 +13,9 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.view.MotionEvent;
 import android.widget.ImageView;
 
 import com.denma.mynews.Views.PageAdapter;
@@ -24,6 +23,9 @@ import com.denma.mynews.Controllers.Fragments.MostPopularFragment;
 import com.denma.mynews.Controllers.Fragments.SportFragment;
 import com.denma.mynews.Controllers.Fragments.TopStoriesFragment;
 import com.denma.mynews.R;
+import com.github.amlcurran.showcaseview.OnShowcaseEventListener;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
+    private TabLayout tabs;
 
     //FOR FRAGMENTS
     // - Declare fragment handled by Navigation Drawer
@@ -86,15 +89,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     // 4 - Configure ViewPager and TabLayout
     private void configureViewPagerAndTabs() {
-        // 1 - Get ViewPager from layout
+        // - Get ViewPager from layout
         pager = (ViewPager) findViewById(R.id.activity_main_viewpager);
-        // 2 - Set Adapter PageAdapter and glue it together
+        // - Set Adapter PageAdapter and glue it together
         pager.setAdapter(new PageAdapter(getSupportFragmentManager(), this));
-        // 1 - Get TabLayout from layout
-        TabLayout tabs= (TabLayout)findViewById(R.id.activity_main_tabs);
-        // 2 - Glue TabLayout and ViewPager together
+        // - Get TabLayout from layout
+        tabs = (TabLayout)findViewById(R.id.activity_main_tabs);
+        // - Glue TabLayout and ViewPager together
         tabs.setupWithViewPager(pager);
-        // 3 - Design purpose. Tabs have the same width
+        // - Design purpose. Tabs have the same width
         tabs.setTabMode(TabLayout.MODE_FIXED);
         tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -115,13 +118,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-    // 5 - show first fragment
+    // 5 - Show first fragment
     private void showFirstFragment(){
         Fragment visibleFragment = getSupportFragmentManager().findFragmentById(R.id.activity_main_viewpager);
         if (visibleFragment == null){
-            // 1.1 - Show News Fragment
+            // - Show News Fragment
             this.showFragment(FRAGMENT_TOPSTORIES);
-            // 1.2 - Mark as selected the menu item corresponding to NewsFragment
+            // - Mark as selected the menu item corresponding to NewsFragment
             navigationView.setCheckedItem(R.id.activity_main_drawer_top_stories);
         }
     }
@@ -149,6 +152,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return true;
             case R.id.activity_main_more_help:
                 // - Launch help
+                launchHelp();
                 return true;
             case R.id.activity_main_more_about:
                 // - Launch About AlertDialog
@@ -186,13 +190,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.activity_main_drawer_search:
                 // - Launch SearchActivity
-                launchSearchActivity();
+                this.launchSearchActivity();
+                break;
             case R.id.activity_main_drawer_notifications:
                 // - Launch NotificationsActivity
-                launchNotificationActivity();
+                this.launchNotificationActivity();
+                break;
+            case R.id.activity_main_drawer_help:
+                // - Launch Help
+                this.launchHelp();
+                break;
             case R.id.activity_main_drawer_about:
                 // - Launch About AlertDialog
-                launchAbout();
+                this.launchAbout();
+                break;
             default:
                 break;
         }
@@ -268,6 +279,60 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.startActivity(notifActivityIntent);
     }
 
+    // --------------
+    // Others
+    // --------------
+
+
+    private void launchHelp(){
+        // - Create ShowcaseView from com.github.amlcurran.showcaseview:library:5.4.3 library
+
+        final ShowcaseView.Builder showBuilder1 = new ShowcaseView.Builder(this);
+        final ShowcaseView.Builder showBuilder2 = new ShowcaseView.Builder(this);
+
+        showBuilder1.setTarget(new ViewTarget(R.id.activity_main_tabs, this))
+                    .setContentText(R.string.category_help)
+                    .setStyle(R.style.CustomShowcaseTheme1)
+                    .build()
+                    .show();
+
+        showBuilder2.setTarget(new ViewTarget(R.id.menu_activity_main_search, this))
+                .setContentText(R.string.tools_help)
+                .setStyle(R.style.CustomShowcaseTheme2);
+
+        showBuilder1.setShowcaseEventListener(new OnShowcaseEventListener() {
+            @Override
+            public void onShowcaseViewHide(ShowcaseView showcaseView) {
+                showBuilder2.build().show();
+            }
+
+            @Override
+            public void onShowcaseViewDidHide(ShowcaseView showcaseView) {}
+
+            @Override
+            public void onShowcaseViewShow(ShowcaseView showcaseView) { }
+
+            @Override
+            public void onShowcaseViewTouchBlocked(MotionEvent motionEvent) { }
+        });
+
+        showBuilder2.setShowcaseEventListener(new OnShowcaseEventListener() {
+            @Override
+            public void onShowcaseViewHide(ShowcaseView showcaseView) {
+                changeNavigationViewItemSelected(tabs.getSelectedTabPosition());
+            }
+
+            @Override
+            public void onShowcaseViewDidHide(ShowcaseView showcaseView) { }
+
+            @Override
+            public void onShowcaseViewShow(ShowcaseView showcaseView) { }
+
+            @Override
+            public void onShowcaseViewTouchBlocked(MotionEvent motionEvent) {}
+        });
+    }
+
     private void launchAbout(){
         ImageView image = new ImageView(this);
         image.setImageResource(R.drawable.poweredby_nytimes_200b);
@@ -277,9 +342,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         // - Add the buttons
-        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.button_2_help, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 dialog.cancel();
+                changeNavigationViewItemSelected(tabs.getSelectedTabPosition());
             }
         });
 

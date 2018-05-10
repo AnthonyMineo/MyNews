@@ -6,14 +6,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.denma.mynews.Controllers.Activities.ArticleShowFromMainActivity;
+import com.denma.mynews.Controllers.Activities.ArticleShowActivity;
 import com.denma.mynews.Models.TopStoriesAPI.TopStoriesResponse;
 import com.denma.mynews.Models.TopStoriesAPI.TopStoriesArticles;
 import com.denma.mynews.R;
@@ -89,8 +88,9 @@ public class TopStoriesFragment extends Fragment {
                     // 1 - Get user from adapter
                     TopStoriesArticles article = topStoriesAdapter.getArticle(position);
                     // 2 - Do something
-                    Intent intent = new Intent(getActivity(), ArticleShowFromMainActivity.class);
+                    Intent intent = new Intent(getActivity(), ArticleShowActivity.class);
                     intent.putExtra("url", article.getUrl());
+                    intent.putExtra("parent", "MainActivity");
                     startActivity(intent);
                 }
             });
@@ -112,21 +112,21 @@ public class TopStoriesFragment extends Fragment {
         this.disposable = NYTStream.streamFetchTopStories().subscribeWith(new DisposableObserver<TopStoriesResponse>() {
             @Override
             public void onNext(TopStoriesResponse response) {
-                Log.e("TAG","On Next");
+                //Log.e("TAG","On Next");
                 // - Update UI with response
                 updateUI(response);
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.e("TAG","On Error "+ e.getMessage());
+                //Log.e("TAG","On Error "+ e.getMessage());
                 // - Signal that there is probably no internet connection
-                Toast.makeText(getContext(), "Please make sure you have access to internet !", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), R.string.on_error, Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onComplete() {
-                Log.e("TAG","On Complete !!");
+                //Log.e("TAG","On Complete !!");
             }
         });
     }

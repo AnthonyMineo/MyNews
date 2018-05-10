@@ -22,13 +22,13 @@ public class NotificationActivity extends AppCompatActivity {
     }
 
     private void configureToolbar(){
-        //Get the toolbar (Serialise)
+        //- Get the toolbar (Serialise)
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //Set the toolbar
+        // - Set the toolbar
         setSupportActionBar(toolbar);
-        // Get a support ActionBar corresponding to this toolbar
+        // - Get a support ActionBar corresponding to this toolbar
         ActionBar ab = getSupportActionBar();
-        // Enable the Up button
+        // - Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
