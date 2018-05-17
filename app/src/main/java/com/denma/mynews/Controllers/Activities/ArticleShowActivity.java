@@ -43,11 +43,6 @@ public class ArticleShowActivity extends AppCompatActivity {
         return getParentActivityIntentImpl();
     }
 
-    @Override
-    public Intent getParentActivityIntent() {
-        return getParentActivityIntentImpl();
-    }
-
     private Intent getParentActivityIntentImpl() {
         Intent i = null;
         // - Test from which Activity this one is launch
